@@ -2,5 +2,5 @@
 
 ## Integrantes
 - [x] **Ronny Garcia** - [R00rss](https://github.com/R00rss)
-- [x] **Alejandra Onia** - []()
-- [x] **Julie Galarza** - []()
+- [x] **Alejandra Onia** - [Alejandra Oña](https://github.com/alejandraodlt)
+- [x] **Julie Galarza** - [juliegalarza](https://github.com/juliegalarza)
