@@ -1,3 +1,20 @@
+# librerias y paquetes a instalar
+
+## frontend
+- nodejs
+- npm
+- npm i -g @angular/cli
+ 
+## backend
+- python3
+- pip
+- pip install virtualenv
+
+## db
+- docker
+- docker-compose
+
+
 # LINUX
 ## Para inicializar el backend (FASTAPI-PYTHON)
 
