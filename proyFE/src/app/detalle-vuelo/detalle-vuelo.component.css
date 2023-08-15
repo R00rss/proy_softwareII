@@ -1,0 +1,151 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+  }
+  
+  .sequence {
+    display: flex;
+    align-items: center;
+  }
+  
+  .step {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .active {
+    font-weight: bold;
+  }
+  /*Titulo*/
+  .page-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /*vuelos*/
+  /* Estilos generales */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilos para el encabezado */
+  .page-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Estilos para el contenido */
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  /* Estilos para los detalles del vuelo */
+  .flight-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .flight-info {
+    flex: 1;
+  }
+  
+  .flight-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .flight-header img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .cities {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .plane-icon {
+    width: 20px; /* Ajusta el tamaño de la imagen */
+    height: 20px;
+    margin-right: 5px; /* Ajusta el espaciado entre la imagen y el texto */
+  }
+  
+  .cities span {
+    font-weight: bold;
+  }
+  
+  .class-info {
+    text-align: center;
+  }
+  
+  /* Estilos para el pie de página */
+  .page-footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+  }
+  
+  .total-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .total-amount {
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .continue-button {
+    background-color: #08019a;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  
+ 
+  
