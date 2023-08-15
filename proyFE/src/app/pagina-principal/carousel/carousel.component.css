@@ -1,0 +1,55 @@
+/* Estilos para el slider */
+
+#image-slider {
+    margin-top: 5px;
+    position: relative;
+}
+
+.slider-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slider {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+
+.slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: inherit;
+    opacity: 1;  /* Hace que la imagen sea completamente opaca */
+    transition: opacity 0.5s ease-in-out;  /* Esta es la transición */
+}
+.slide img:hover {
+  opacity: 0.7;  /* Hace que la imagen sea ligeramente transparente cuando pasas el mouse sobre ella */
+}
+
+.arrow-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.arrow {
+    width: 40px;
+    height: 40px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+}

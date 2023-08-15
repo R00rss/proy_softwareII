@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "BlackOpsOne";
+    src: url('../../../assets/fonts/Black_Ops_One/BlackOpsOne-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Playball";
+    src: url('../../../assets/fonts/Playball/Playball-Regular.ttf');
+    font-weight: normal;
+    font-size: normal;
+}
+.header-content {
+  display: flex;
+  align-items: center;
+ 
+  background-color: rgb(32, 32, 133);
+  
+}
+
+.logo img {
+  height: 80px;
+  transition: transform 1s ease-in-out;
+}
+
+.logo img:hover {
+  transform: rotate(360deg);
+}
+
+.header-text {
+  margin-left: 10px; /* Espacio entre el logo y el texto */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.header-text h2{
+  font-family: "BlackOpsOne";
+  text-size-adjust: inherit;
+  margin: 0;
+}
+.header-text p {
+  font-family: 'Playball';
+  margin: 0;
+}
+.login-image img {
+  margin-left: 900px;
+  height: 40px; /* Ajusta la altura de la imagen de login */
+}
+
