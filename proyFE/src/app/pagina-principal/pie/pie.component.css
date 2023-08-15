@@ -4,10 +4,13 @@
     font-weight: normal;
     font-size: normal;
 }
-.icon{
-    font-family: 'WebSymbolsRegular';
-    color: #000000;
+@font-face {
+    font-family: "BlackOpsOne";
+    src: url('../../../assets/fonts/Black_Ops_One/BlackOpsOne-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
 }
+
 /*Footer*/
 footer {
     background-color: #fbe6ff;
@@ -15,27 +18,53 @@ footer {
 }
 
 .footer-content {
-    max-width: 1200px;
+    max-width: 90%;
     margin: 0 auto;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.separator {
-    width: 1px;
-    height: 20px;
-    background-color: #ccc;
+.copyright{
+    display: flex;
+    color: rgba(0, 9, 40, 0.83);
+    text-align: center;
+    font-family: BlackOpsOne;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
-.terms a {
+.copyright a{
+    display: flex;
+    color: rgba(0, 0, 0, 0.63);
+    text-align: center;
+    font-family: BlackOpsOne;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
     text-decoration: none;
-    color: #333;
-    margin-right: 1px; /* Ajusta el margen derecho para separar de los iconos */
+    vertical-align: middle;
+    margin-top: 5px;
+}
+
+.icon{
+    font-family: 'WebSymbolsRegular';
+    color: #000000;
+}
+
+.social-icons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
 }
 
 .social-icons a {
     margin-left: 10px;
+    font-size: 25px;
 }
 
   
