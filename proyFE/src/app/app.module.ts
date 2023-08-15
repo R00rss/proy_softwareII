@@ -9,6 +9,12 @@ import { CabeceraComponent } from './pagina-principal/cabecera/cabecera.componen
 import { CarouselComponent } from './pagina-principal/carousel/carousel.component';
 import { CentroComponent } from './pagina-principal/centro/centro.component';
 import { PieComponent } from './pagina-principal/pie/pie.component';
+import { TiposClaseComponent } from './tipos-clase/tipos-clase.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -18,11 +24,16 @@ import { PieComponent } from './pagina-principal/pie/pie.component';
     CabeceraComponent,
     CarouselComponent,
     CentroComponent,
-    PieComponent
+    PieComponent,
+    TiposClaseComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatGridListModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
