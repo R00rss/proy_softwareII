@@ -23,6 +23,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 
 
+import { TiposClaseComponent } from './tipos-clase/tipos-clase.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -33,7 +38,8 @@ import { MatIconModule } from '@angular/material/icon';
     CarouselComponent,
     CentroComponent,
     PieComponent,
-    DetalleVueloComponent
+    DetalleVueloComponent,
+    TiposClaseComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +54,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatRadioModule, 
     MatCheckboxModule, 
     MatIconModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatGridListModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
