@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FlightBookingService } from '../services/flight-booking.service';
+import { FlightBookingService } from '../services/flight-booking-service/flight-booking.service';
 import { DetalleVuelo } from '../models/DetalleVuelo';
 
 @Component({
