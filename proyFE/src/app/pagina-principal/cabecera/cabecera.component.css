@@ -11,15 +11,11 @@
     font-size: normal;
 }
 .header-content {
-  display: flex;
-  align-items: center;
- 
   background-color: rgb(32, 32, 133);
-  
 }
 
 .logo img {
-  height: 80px;
+  height: 75px;
   transition: transform 1s ease-in-out;
 }
 
@@ -28,11 +24,9 @@
 }
 
 .header-text {
-  margin-left: 10px; /* Espacio entre el logo y el texto */
+  float: right;
+  margin-left: 5px; /* Espacio entre el logo y el texto */
   color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 .header-text h2{
   font-family: "BlackOpsOne";
@@ -43,8 +37,25 @@
   font-family: 'Playball';
   margin: 0;
 }
-.login-image img {
-  margin-left: 900px;
-  height: 40px; /* Ajusta la altura de la imagen de login */
+
+.login{
+  margin: 5px;
+  padding: 5px;
 }
 
+.login-image{
+  padding: 5px;
+}
+.login-image img {
+  margin-left: 22%;
+  /*margin-left: 900px;*/
+  height: 30px; /* Ajusta la altura de la imagen de login */
+  width: 30px;
+}
+
+.inicio-sesion {
+  margin: 2px 0px 2px 0px;
+  font-family: "BlackOpsOne";
+  font-size: 10px;
+  text-decoration: none;
+}
