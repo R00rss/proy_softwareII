@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { PageNoFoundComponent } from './page-no-found/page-no-found.component';
@@ -58,7 +58,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     BrowserAnimationsModule,
     MatCardModule,
     MatGridListModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

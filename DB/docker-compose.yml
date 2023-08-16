@@ -11,7 +11,6 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./pgdata:/var/lib/postgresql/data/pgdata
-      - ./initial_scripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:
@@ -24,8 +23,6 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@proydev.com
       PGADMIN_DEFAULT_PASSWORD: devPG123
-    volumes:
-      - ./pgadmin_data:/var/lib/pgadmin
     ports:
       - "8080:80"
     networks:
