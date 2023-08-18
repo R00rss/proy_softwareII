@@ -1,3 +1,5 @@
+import { Flight } from "../services/flights/flights.service"
+
 export const TYPE_COLUMN = {
     TEXT: 'TEXT',
     DATE: 'DATE',
@@ -20,7 +22,7 @@ export const ICON_SORT_TYPE = {
 }
 
 
-export const EXAMPLE_FLIGHTS = [{
+export const EXAMPLE_FLIGHTS:Flight[] = [{
     "plane_id": "b055fdfe-ffae-4372-939a-33e55334dbb7",
     "pilot_id": "e12a107a-75cf-48a3-9e1b-25c046b22606",
     "airport_origin_id": "6e1267dc-8b06-458b-8d60-d7a05cc83cbd",
@@ -42,7 +44,6 @@ export const EXAMPLE_FLIGHTS = [{
         "capacity": 400,
         "serial_number": "SN123",
         "code": "PLN001",
-        "id": "b055fdfe-ffae-4372-939a-33e55334dbb7"
     },
     "airport_origin": {
         "name": "Mariscal Sucre",
@@ -57,6 +58,5 @@ export const EXAMPLE_FLIGHTS = [{
         "country": "Ecuador",
         "code": "0002",
         "id": "1ce6c77e-feb2-4cea-94ad-0bf90a6ca6d4"
-    },
-    "reservations": []
+    }
 }]

@@ -30,7 +30,7 @@
     </section>
     <section class="flex flex-col justify-start gap-1 text-sm">
         <label class="invisible" for="">filtrar</label>
-        <button (click)="searchFlights()"
+        <button id="searchFlightButton" (click)="searchFlights()"
             class="w-32 flex justify-center items-center gap-2 duration-300 border-2 border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg mx-auto">
             <p>Buscar</p>
             <i class="pi pi-search"></i>
@@ -39,10 +39,10 @@
         </button>
     </section>
 </head>
-<main class="w-[min(90%,1200px)] mx-auto mt-4 text-sm">
-    <p-table selectionMode="single" dataKey="id" [(selection)]="selectedFlight"
-        *ngIf="listAndCountFlights&&listAndCountFlights.count>0" [value]="listAndCountFlights.data" [paginator]="true"
-        [rows]="5" [showCurrentPageReport]="false"
+<div id="flightsTableContainer" *ngIf="listAndCountFlights&&listAndCountFlights.count>0"></div>
+<main *ngIf="listAndCountFlights&&listAndCountFlights.count>0" class="w-[min(90%,1200px)] mx-auto mt-4 text-sm">
+    <p-table selectionMode="single" dataKey="id" [(selection)]="selectedFlight" [value]="listAndCountFlights.data"
+        [paginator]="true" [rows]="5" [showCurrentPageReport]="false"
         currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} registros"
         [rowsPerPageOptions]="[10, 25, 50]">
         <ng-template pTemplate="header">
@@ -59,7 +59,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-flight let-index="rowIndex">
-            <tr style="cursor: pointer;" (click)="flightSelect(flight)">
+            <tr id="{{getValidSelectorByUUID(flight.id)}}" style="cursor: pointer;" (click)="flightSelect(flight)">
                 <td style="text-align: center;" class="w-[5%]">{{ index + 1 }}</td>
                 <td class="w-[22%]">{{ flight.origin }}</td>
                 <td class="w-[22%]">{{ flight.destination }}</td>
@@ -68,8 +68,7 @@
             </tr>
         </ng-template>
     </p-table>
-    <section *ngIf="listAndCountFlights&&listAndCountFlights.count<=0"
-        class="flex flex-col justify-center items-center">
-        <p>No se encontraron vuelos</p>
-    </section>
 </main>
+<section *ngIf="listAndCountFlights&&listAndCountFlights.count<=0" class="flex flex-col justify-center items-center">
+    <p>No se encontraron vuelos</p>
+</section>

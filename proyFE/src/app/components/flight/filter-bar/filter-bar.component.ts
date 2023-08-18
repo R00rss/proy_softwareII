@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TreeNode } from 'primeng/api';
 import { OPTIONS_TRIP } from 'src/app/constants/filters';
 import { ICON_SORT_TYPE } from 'src/app/constants/global';
 import { Column, ListAndCount } from 'src/app/model/global';
@@ -9,11 +8,7 @@ import { BlockGUIService } from 'src/app/services/gui/blockGUI/block-gui.service
 import { MessagesService } from 'src/app/services/gui/messages/messages.service';
 import { FlightStateService } from 'src/app/services/states/flight/flight-state.service';
 import { Router } from '@angular/router';
-
-interface NodeEvent {
-  originalEvent: Event;
-  node: TreeNode;
-}
+import { FILTER_MESSAGES } from 'src/app/constants/messages';
 
 @Component({
   selector: 'app-filter-bar',
@@ -118,35 +113,41 @@ export class FilterBarComponent implements OnInit {
   }
 
 
+  getValidSelectorByUUID(uuid: string): string {
+  const modifiedId = uuid.replace(/-/g, ''); 
+  console.log({ modifiedId })
+  return `CODE${modifiedId}`;
+  }
+
   searchFlights(params: any = null) {
     if (this.selectedTrip === undefined || this.selectedTrip === null) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: 'Seleccione un tipo de viaje' })
+      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.SELECT_TYPE_TRIP })
       return;
     }
     if (this.selectedDestination === undefined || this.selectedDestination === null) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: 'Seleccione un destino' })
+      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.SELECT_DESTINATION })
       return;
     }
     if (this.selectedOrigin === undefined || this.selectedOrigin === null) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: 'Seleccione un Origen' })
+      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.SELECT_ORIGIN })
       return;
     }
-    if (this.selectedOrigin.code === this.selectedDestination.code) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: 'El origen y destino no pueden ser iguales' })
+    if (this.selectedOrigin.code == this.selectedDestination.code) {
+      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.ORIGIN_DESTINATION_NOT_SAME })
       return;
     }
 
 
-    if (this.selectedTrip && this.selectedTrip.code === OPTIONS_TRIP.ROUND_TRIP) {
+    if (this.selectedTrip && this.selectedTrip.code == OPTIONS_TRIP.ROUND_TRIP) {
       if (this.selectedFromDate.getTime() >= this.selectedToDate.getTime()) {
-        this.messagesService.showMessageWithContent({ severity: 'warn', summary: 'Alerta', detail: 'La fecha de salida debe ser menor a la fecha de llegada' })
+        this.messagesService.showMessageWithContent({ severity: 'warn', summary: 'Alerta', detail: FILTER_MESSAGES.FROM_DATE_NOT_MINOR_OR_EQUAL_TO_DATE })
         return;
       }
     }
 
     this.block();
     this.listAndCountFlights = undefined;
-    this.flightsService.searchFlights({ skip: 0, limit: 100, dateFrom: this.selectedFromDate, dateTo: this.selectedTrip.code === OPTIONS_TRIP.ROUND_TRIP ? this.selectedToDate : undefined, destination: this.selectedDestination?.code, origin: this.selectedOrigin?.code }).subscribe(
+    this.flightsService.searchFlights({ skip: 0, limit: 100, dateFrom: this.selectedFromDate, dateTo: this.selectedTrip.code === OPTIONS_TRIP.ROUND_TRIP ? this.selectedToDate : undefined, destination: this.selectedDestination.code, origin: this.selectedOrigin.code }).subscribe(
       {
         next: (listAndCountFlights) => {
           console.log({ listAndCountFlights })
