@@ -1,4 +1,199 @@
-/* You can add global styles to this file, and also import other style files */
-@import "~bootstrap/dist/css/bootstrap.min.css";
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Box sizing rules */
+
+
+
+@import "primeicons/primeicons.css";
+@import 'primeng/resources/primeng.min.css';
+@import 'primeng/resources/themes/bootstrap4-light-blue/theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary-color-85: #75135d85;
+    --secondary-color-85: #3278db85;
+    --tertiary-color-85: #67e8f985;
+    --primary-color: #75135d;
+    --secondary-color: #3278db;
+    --tertiary-color: #67e8f9;
+    --primary-gray: #b0dee1;
+    --secondary-gray: #8dcacf;
+    --tertiary-gray: #65afbc;
+    --quaternary-gray: #488197;
+    --purple-300: #4e0258;
+    --purple-400: #6c027c;
+    --cyan-100-50: #b0dee144;
+    --cyan-100: #b0dee1;
+    --cyan-200: #94dbe0;
+    --cyan-300: #6ed9e0;
+    --cyan-400: #39d1dc;
+    --cyan-500: #12d4e2;
+    --purple-000: #c100db4f;
+    --purple-500: #c100db;
+    --purple-600: #9900ad;
+    --purple-700: #790088;
+    --purple-800: #53005e;
+    --purple-900: #3b0043;
+    --purple-1000: #17001a;
+}
+
+.p-button {
+    color: #ffffff;
+    background: var(--primary-color) !important;
+    border: 1px solid var(--primary-color) !important;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    border-radius: 4px;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+    background: var(--primary-color) !important;
+    color: #ffffff;
+    padding: .85rem 0rem
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+    padding: .65rem 0rem
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #ffffff;
+}
+
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-last {
+    color: var(--primary-color) !important;
+}
+
+
+.bg_gradient_cyan {
+    background: linear-gradient(90deg,
+            var(--cyan-100-50),
+            var(--cyan-100),
+            var(--cyan-200),
+            var(--cyan-300),
+            var(--cyan-300),
+            var(--cyan-300),
+            var(--cyan-300),
+            var(--cyan-300),
+            var(--cyan-200),
+            var(--cyan-100),
+            var(--cyan-100-50));
+    /* background: linear-gradient(90deg, var(--cyan-100) 0%, var(--cyan-200) 100%); */
+}
+
+.bg_gradient_purple {
+    background: linear-gradient(90deg,
+            var(--purple-700) 0%,
+            var(--purple-800) 100%);
+    /* background: linear-gradient(
+      90deg,
+      var(--purple-000),
+      var(--purple-600),
+      var(--purple-600),
+      var(--purple-600),
+      var(--purple-600),
+      var(--purple-000)
+    ); */
+}
+
+.bg_gradient_purple_dark {
+    background: linear-gradient(90deg,
+            var(--purple-900) 0%,
+            var(--purple-1000) 100%);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+    padding: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+    scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Shantell+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+
+* {
+    font-family: "Open Sans", sans-serif;
+}
+
+.primary_font {
+    font-family: "Open Sans", sans-serif;
+}
+
+.secondary_font {
+    font-family: "Shantell Sans", cursive;
+}

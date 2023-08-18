@@ -8,6 +8,7 @@ from database import models, schemas
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
+import schemas as schemasResponse
 
 origins = [
     # all origins
@@ -97,7 +98,7 @@ def read_flights(db: Session = Depends(get_db), skip: int = 0, limit: int = 100)
     return db_flights
 
 
-@app.get("/flights/search", response_model=List[schemas.Flight])
+@app.get("/flights/search", response_model=schemasResponse.DataAndCount[schemas.Flight])
 def search_flights(
     db: Session = Depends(get_db),
     dateFrom: datetime = Query(None),
@@ -118,12 +119,16 @@ def search_flights(
     if destination:
         query = query.filter(models.Flight.destination == destination)
 
+    total_count = query.count()
+
     db_flights = query.offset(skip).limit(limit).all()
 
-    if not db_flights:
-        raise HTTPException(status_code=404, detail="No flights found")
+    # if not db_flights:
+    #     raise HTTPException(status_code=404, detail="No flights found")
 
-    return db_flights
+    return schemasResponse.DataAndCount[schemas.Flight](
+        data=db_flights, count=total_count
+    )
 
 
 @app.post("/flights/", response_model=schemas.Flight)
@@ -165,6 +170,83 @@ def delete_flight(flight_id: str, db: Session = Depends(get_db)):
     db.delete(db_flight)
     db.commit()
     return db_flight
+
+
+# Rutas CRUD para la tabla Airports
+@app.get("/airports/", response_model=List[schemas.Airport])
+def read_airports(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
+    db_airports = db.query(models.Airport).offset(skip).limit(limit).all()
+    return db_airports
+
+
+@app.get("/airports/search", response_model=List[schemas.Airport])
+def search_airports(
+    db: Session = Depends(get_db),
+    skip: int = 0,
+    limit: int = 100,
+):
+    query = db.query(models.Airport)
+    db_airport = query.offset(skip).limit(limit).all()
+    if not db_airport:
+        raise HTTPException(status_code=404, detail="No airports found")
+    return db_airport
+
+
+@app.post("/airports/", response_model=schemas.Airport)
+def create_airports(airport: schemas.AirportCreate, db: Session = Depends(get_db)):
+    db_airport = models.Airport(**airport.dict())
+    db.add(db_airport)
+    db.commit()
+    db.refresh(db_airport)
+    return db_airport
+
+
+@app.get("/airports/{airport_id}", response_model=schemas.Airport)
+def read_airport(airport_id: str, db: Session = Depends(get_db)):
+    db_airport = (
+        db.query(models.Airport).filter(models.Airport.id == airport_id).first()
+    )
+    if db_airport is None:
+        raise HTTPException(status_code=404, detail="Airport not found")
+    return db_airport
+
+
+@app.put("/airports/{airport_id}", response_model=schemas.Airport)
+def update_airport(
+    airport_id: str, airport: schemas.AirportCreate, db: Session = Depends(get_db)
+):
+    db_airport = (
+        db.query(models.Airport).filter(models.Airport.id == airport_id).first()
+    )
+    if db_airport is None:
+        raise HTTPException(status_code=404, detail="Airport not found")
+    for key, value in airport.dict().items():
+        setattr(db_airport, key, value)
+    db.commit()
+    db.refresh(db_airport)
+    return db_airport
+
+
+@app.delete("/airports/{airport_id}", response_model=schemas.Airport)
+def delete_airport(airport_id: str, db: Session = Depends(get_db)):
+    db_airport = db.query(models.Flight).filter(models.Airport.id == airport_id).first()
+    if db_airport is None:
+        raise HTTPException(status_code=404, detail="Flight not found")
+    db.delete(db_airport)
+    db.commit()
+    return db_airport
+
+
+@app.get("/airports/", response_model=List[schemas.Airport])
+def read_airports(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
+    db_airports = db.query(models.Airport).offset(skip).limit(limit).all()
+    return db_airports
+
+
+@app.get("/destinations/", response_model=List[schemasResponse.destination])
+def get_destinations(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
+    db_airports = db.query(models.Airport).offset(skip).limit(limit).all()
+    return db_airports
 
 
 if __name__ == "__main__":

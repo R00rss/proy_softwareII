@@ -1,0 +1,3 @@
+.selectedFlight {
+    box-shadow: inset 0 0 13px -5px var(--primary-color);
+}

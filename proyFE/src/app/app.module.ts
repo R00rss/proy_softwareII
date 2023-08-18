@@ -1,65 +1,51 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app.component';
+
 import { AppRoutingModule } from './app-routing.module';
-import { PageNoFoundComponent } from './page-no-found/page-no-found.component';
-import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.component';
-import { CabeceraComponent } from './pagina-principal/cabecera/cabecera.component';
-import { CarouselComponent } from './pagina-principal/carousel/carousel.component';
-import { CentroComponent } from './pagina-principal/centro/centro.component';
-import { PieComponent } from './pagina-principal/pie/pie.component';
-import { DetalleVueloComponent } from './detalle-vuelo/detalle-vuelo.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms'; // Importa FormsModule
-import { MatRadioModule } from '@angular/material/radio'; // Importa MatRadioModule
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-
-
-import { TiposClaseComponent } from './tipos-clase/tipos-clase.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
-
+import { AppComponent } from './app.component';
+import { HomeComponent } from './pages/home/home.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { CarouselModule } from 'primeng/carousel';
+import { FilterBarComponent } from './components/flight/filter-bar/filter-bar.component';
+import { CalendarModule } from 'primeng/calendar';
+import { TableModule } from 'primeng/table';
+import { FormsModule } from '@angular/forms'; 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { DropdownModule } from 'primeng/dropdown';
+import { HttpClientModule } from '@angular/common/http';
+import { DropdownComponent } from './components/filters/dropdown/dropdown.component';
+import { FlightDetailComponent } from './pages/flight-detail/flight-detail.component';
+import { BlockGUIComponent } from './components/block-gui/block-gui.component';
+import { MessagesModule } from 'primeng/messages';
+import { MessageComponent } from './components/message/message.component';
 @NgModule({
   declarations: [
     AppComponent,
-    PageNoFoundComponent,
-    PaginaPrincipalComponent,
-    CabeceraComponent,
+    HomeComponent,
+    NotFoundComponent,
+    NavbarComponent,
+    FooterComponent,
     CarouselComponent,
-    CentroComponent,
-    PieComponent,
-    DetalleVueloComponent,
-    TiposClaseComponent
+    FilterBarComponent,
+    DropdownComponent,
+    FlightDetailComponent,
+    BlockGUIComponent,
+    MessageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatButtonModule,
-    MatInputModule,
-    MatTabsModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    FormsModule, 
-    MatRadioModule, 
-    MatCheckboxModule, 
-    MatIconModule,
-    NoopAnimationsModule,
+    CarouselModule,
+    CalendarModule,
+    FormsModule,
     BrowserAnimationsModule,
-    MatCardModule,
-    MatGridListModule,
-    MatIconModule,
-    HttpClientModule
+    DropdownModule,
+    HttpClientModule,
+    TableModule,
+    MessagesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

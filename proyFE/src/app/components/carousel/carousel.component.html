@@ -1,0 +1,13 @@
+<p-carousel [circular]="true" [value]="items" [showNavigators]="false" [showIndicators]="false" [responsiveOptions]="responsiveOptions" autoPlayInterval="1000" >
+    <ng-template let-item pTemplate="item">
+        <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+            <div class="mb-3">
+                <img src="{{item.image}}" [title]="item.title" [alt]="item.alt"
+                    class="w-full h-[500px] object-contain" />
+            </div>
+            <!-- <div>
+                <p>{{item.description}}</p>
+            </div> -->
+        </div>
+    </ng-template>
+</p-carousel>
