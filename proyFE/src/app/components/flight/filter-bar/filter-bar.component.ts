@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { OPTIONS_TRIP } from 'src/app/constants/filters';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DEFAULT_PASSENGERS, OPTIONS_TRIP } from 'src/app/constants/filters';
 import { ICON_SORT_TYPE } from 'src/app/constants/global';
 import { Column, ListAndCount } from 'src/app/model/global';
 import { AirportsService, Destinations, comboItem } from 'src/app/services/airports/airports.service';
@@ -9,6 +9,7 @@ import { MessagesService } from 'src/app/services/gui/messages/messages.service'
 import { FlightStateService } from 'src/app/services/states/flight/flight-state.service';
 import { Router } from '@angular/router';
 import { FILTER_MESSAGES } from 'src/app/constants/messages';
+import { Passengers } from 'src/app/model/passengers';
 
 @Component({
   selector: 'app-filter-bar',
@@ -16,6 +17,8 @@ import { FILTER_MESSAGES } from 'src/app/constants/messages';
   styleUrls: ['./filter-bar.component.css']
 })
 export class FilterBarComponent implements OnInit {
+
+  @ViewChild('modalPassengers') modalPassengers: ElementRef | undefined;
 
   constructor(
     public airportsService: AirportsService,
@@ -33,9 +36,10 @@ export class FilterBarComponent implements OnInit {
         next: (destinationOptions) => {
           console.log({ destinationOptions })
           this.destinationOptions = destinationOptions;
-          if (this.destinationOptions.length > 0) {
-            this.selectedDestination = this.destinationOptions[0];
-          }
+          // if (this.destinationOptions.length > 0) {
+          //   this.selectedDestination = this.destinationOptions[0];
+          //   this.selectedOrigin = this.destinationOptions[0];
+          // }
         },
         complete: () => console.info('complete'),
         error: (err) => console.error({ err })
@@ -58,8 +62,8 @@ export class FilterBarComponent implements OnInit {
 
 
   OPTIONS_TRIP = OPTIONS_TRIP;
-  selectedFromDate: Date = new Date();
-  selectedToDate: Date = new Date();
+  selectedFromDate: Date | undefined;
+  selectedToDate: Date | undefined;
 
   tripOptions: comboItem[] = [];
   destinationOptions: comboItem[] = [];
@@ -67,6 +71,7 @@ export class FilterBarComponent implements OnInit {
   selectedTrip: comboItem | undefined;
   selectedDestination: comboItem | undefined;
   selectedOrigin: comboItem | undefined;
+  passengers: Passengers = DEFAULT_PASSENGERS;
 
   // new_detail: number = Math.floor(Math.random() * 1000);
 
@@ -75,6 +80,19 @@ export class FilterBarComponent implements OnInit {
 
   listAndCountFlights: ListAndCount<Flight> | undefined;
   selectedFlight: Flight | undefined;
+
+  openModalPassengers() {
+    // this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: 'Funcionalidad no implementada' })
+    if (this.modalPassengers) this.modalPassengers.nativeElement.showModal();
+  }
+  closeModalPassengers() {
+    // this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: 'Funcionalidad no implementada' })
+
+    if (this.modalPassengers) this.modalPassengers.nativeElement.close();
+  }
+  confirmPassengers(){
+    this.closeModalPassengers();
+  }
 
   block() {
     this.blockGUIService.blockGUI();
@@ -114,33 +132,44 @@ export class FilterBarComponent implements OnInit {
 
 
   getValidSelectorByUUID(uuid: string): string {
-  const modifiedId = uuid.replace(/-/g, ''); 
-  console.log({ modifiedId })
-  return `CODE${modifiedId}`;
+    const modifiedId = uuid.replace(/-/g, '');
+    console.log({ modifiedId })
+    return `CODE${modifiedId}`;
   }
 
   searchFlights(params: any = null) {
     if (this.selectedTrip === undefined || this.selectedTrip === null) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.SELECT_TYPE_TRIP })
+      this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_TYPE_TRIP })
       return;
     }
     if (this.selectedDestination === undefined || this.selectedDestination === null) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.SELECT_DESTINATION })
+      this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_DESTINATION })
       return;
     }
+
+
+    if (this.selectedFromDate === undefined || this.selectedFromDate === null) {
+      this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_FROM_DATE })
+      return;
+    }
+
     if (this.selectedOrigin === undefined || this.selectedOrigin === null) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.SELECT_ORIGIN })
+      this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_ORIGIN })
       return;
     }
     if (this.selectedOrigin.code == this.selectedDestination.code) {
-      this.messagesService.showMessageWithContent({ severity: 'error', summary: 'Error', detail: FILTER_MESSAGES.ORIGIN_DESTINATION_NOT_SAME })
+      this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.ORIGIN_DESTINATION_NOT_SAME })
       return;
     }
 
 
     if (this.selectedTrip && this.selectedTrip.code == OPTIONS_TRIP.ROUND_TRIP) {
+      if (this.selectedToDate === undefined || this.selectedToDate === null) {
+        this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_TO_DATE })
+        return;
+      }
       if (this.selectedFromDate.getTime() >= this.selectedToDate.getTime()) {
-        this.messagesService.showMessageWithContent({ severity: 'warn', summary: 'Alerta', detail: FILTER_MESSAGES.FROM_DATE_NOT_MINOR_OR_EQUAL_TO_DATE })
+        this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.FROM_DATE_NOT_MINOR_OR_EQUAL_TO_DATE })
         return;
       }
     }

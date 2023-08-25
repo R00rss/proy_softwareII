@@ -38,6 +38,14 @@
     --purple-1000: #17001a;
 }
 
+.w_standard {
+    width: min(1500px, 100%)
+}
+
+.w_standard_medium {
+    width: min(1200px, 100%)
+}
+
 .p-button {
     color: #ffffff;
     background: var(--primary-color) !important;
@@ -52,6 +60,16 @@
     background: var(--primary-color) !important;
     color: #ffffff;
     padding: .85rem 0rem
+}
+
+.p-button-add-secondary {
+    height: 15px;
+    font-size: 2px !important;
+}
+
+.p-button-add-secondary .pi-plus,
+.p-button-add-secondary .pi-minus {
+    font-size: 0.7rem !important;
 }
 
 .p-datatable .p-datatable-tbody>tr>td {
@@ -108,6 +126,14 @@
             var(--purple-900) 0%,
             var(--purple-1000) 100%);
 }
+
+.bg_gradient_purple_light {
+    background: linear-gradient(90deg,
+            white 0%,
+            #e3b6e9 50%,
+            white 100%);
+}
+
 
 *,
 *::before,

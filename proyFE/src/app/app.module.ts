@@ -21,6 +21,9 @@ import { FlightDetailComponent } from './pages/flight-detail/flight-detail.compo
 import { BlockGUIComponent } from './components/block-gui/block-gui.component';
 import { MessagesModule } from 'primeng/messages';
 import { MessageComponent } from './components/message/message.component';
+import { PassengersSelectorComponent } from './components/filters/passengers-selector/passengers-selector.component';
+import {InputNumberModule} from 'primeng/inputnumber';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +37,7 @@ import { MessageComponent } from './components/message/message.component';
     FlightDetailComponent,
     BlockGUIComponent,
     MessageComponent,
+    PassengersSelectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,8 @@ import { MessageComponent } from './components/message/message.component';
     DropdownModule,
     HttpClientModule,
     TableModule,
-    MessagesModule
+    MessagesModule,
+    InputNumberModule
   ],
   providers: [],
   bootstrap: [AppComponent]

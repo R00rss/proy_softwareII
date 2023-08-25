@@ -1,0 +1,8 @@
+.filter-bar-container {
+    position: absolute;
+    bottom: 70px;
+    /* center conrtainer */
+    left: 50%;
+    transform: translateX(-50%);
+    /* center conrtainer */
+}

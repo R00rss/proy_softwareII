@@ -43,7 +43,7 @@ export class AirportsService {
   getOptionsTrip(): Observable<comboItem[]> {
     return of([
       {
-        name: 'Ida',
+        name: 'Solo ida',
         code: OPTIONS_TRIP.ONE_WAY
       },
       {

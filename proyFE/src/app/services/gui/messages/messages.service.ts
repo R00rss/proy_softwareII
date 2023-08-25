@@ -20,8 +20,9 @@ export class MessagesService {
     this.isVisibleMessageSubject.next(true);
   }
   showMessageWithContent(message: Message) {
-    this.isVisibleMessageSubject.next(true);
+    this.showMessage();
     this.messageSubject.next(message);
+    setTimeout(() => this.hideMessage(), 3000);
   }
   hideMessage() {
     this.isVisibleMessageSubject.next(false);

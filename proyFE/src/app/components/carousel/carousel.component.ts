@@ -24,28 +24,31 @@ export class CarouselComponent {
   constructor() { }
 
   ngOnInit() {
-    this.items = [{
-      image: '../../../assets/images/banner_guayaquil.jpg',
-      alt: 'banner_guayaquil',
-      description: 'Guayaquil',
-      title: 'Guayaquil'
-    },
-    {
-      image: '../../../assets/images/banner_quito.jpg',
-      alt: 'banner_quito',
-      description: 'Quito',
-      title: 'Quito'
-    }, {
-      image: '../../../assets/images/banner_guayaquil2.webp',
-      alt: 'banner_guayaquil2',
-      description: 'Guayaquil',
-      title: 'Guayaquil'
-    }, {
-      image: '../../../assets/images/banner_quito2.jpg',
-      alt: 'banner_quito',
-      description: 'Quito',
-      title: 'Quito'
-    }
+    this.items = [
+      // {
+      //   image: '../../../assets/images/banner_guayaquil.jpg',
+      //   alt: 'banner_guayaquil',
+      //   description: 'Guayaquil',
+      //   title: 'Guayaquil'
+      // },
+      {
+        image: '../../../assets/images/banner_quito.jpg',
+        alt: 'banner_quito',
+        description: 'Quito',
+        title: 'Quito'
+      },
+      {
+        image: '../../../assets/images/banner_guayaquil2.webp',
+        alt: 'banner_guayaquil2',
+        description: 'Guayaquil',
+        title: 'Guayaquil'
+      },
+      // {
+      //   image: '../../../assets/images/banner_quito2.jpg',
+      //   alt: 'banner_quito',
+      //   description: 'Quito',
+      //   title: 'Quito'
+      // }
     ];
     this.responsiveOptions = [
       {
