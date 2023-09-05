@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'search_detail', component: SearchDetailComponent },
   { path: 'flight_detail/:selectedCostKey', component: FlightDetailComponent },
   { path: 'detalle_vuelo/:selectedCostKey', component: FlightDetailComponent },
-  { path: 'clients_detail/:numberClients', component: ClientsDetailComponent },
+  { path: 'clients_detail', component: ClientsDetailComponent },
   // { path: 'flightDetail', component: FlightDetailComponent },
   { path: '**', component: NotFoundComponent }
 ];

@@ -28,6 +28,10 @@ import { registerLocaleData } from '@angular/common';
 import { ClientsDetailComponent } from './pages/clients_detail/clients-detail/clients-detail.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableComponent } from './components/flight/table/table.component';
+import { TabViewModule } from 'primeng/tabview';
+import { PassengerTypePipe } from './pipes/passenger-type.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
+
 // Registra los datos de localización en español
 registerLocaleData(localeEs);
 
@@ -48,6 +52,7 @@ registerLocaleData(localeEs);
     SearchDetailComponent,
     ClientsDetailComponent,
     TableComponent,
+    PassengerTypePipe
   ],
   imports: [
     BrowserModule,
@@ -61,7 +66,9 @@ registerLocaleData(localeEs);
     TableModule,
     MessagesModule,
     InputNumberModule,
-    InputTextModule
+    InputTextModule,
+    TabViewModule,
+    ReactiveFormsModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es' }],
   bootstrap: [AppComponent]

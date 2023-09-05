@@ -34,6 +34,7 @@ export class FlightDetailComponent {
   filters: Filters | undefined;
   filtersReturn: Filters | undefined;
   showTableFlight: boolean = false;
+  isRoundTrip: boolean = false;
   @ViewChild('modalSeats') modalSeats: ElementRef | undefined;
   @ViewChild('contactDetail') contactDetail: ElementRef | undefined;
 
@@ -68,10 +69,13 @@ export class FlightDetailComponent {
 
     if (this.filters) {
       if (this.filters.trip == OPTIONS_TRIP.ROUND_TRIP) {
+        this.isRoundTrip = true;
         this.filtersReturn = this.filterStateService.getFiltersReturnSelected();
         console.log({ filtersReturn: this.filtersReturn })
         console.log({ filters: this.filters })
         this.showTableFlight = true;
+      }else{
+        this.flightStateService.resetReturn();
       }
     }
 
@@ -115,10 +119,12 @@ export class FlightDetailComponent {
   }
 
   handleSetClients() {
-    if (this.totalPassengers <= 0) return this.router.navigate(['/home']);
+    // if (this.totalPassengers <= 0) return this.router.navigate(['/home']);
     this.router.navigate(['/clients_detail'])
     return
   }
+
+
 
   getDuration(departure: string, arrival: string): string {
     const departureDate = new Date(departure);

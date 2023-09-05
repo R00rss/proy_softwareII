@@ -209,6 +209,6 @@
 
     </ul>
 </main>
-<section *ngIf="!listAndCountFlights || listAndCountFlights.count<=0" class="flex flex-col justify-center items-center">
+<section *ngIf="!listAndCountFlights || listAndCountFlights.count<=0" class="text-center"  [ngClass]="{'mt-40 mb-5 w-[min(90%,1200px)]':!roundTrip,'mt-4 w-full mb-4':roundTrip===true}">
     <p>No se encontraron vuelos</p>
 </section>

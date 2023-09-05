@@ -1,25 +1,53 @@
 <app-navbar></app-navbar>
-<section class="min-h-[calc(100vh-200px)]">
-    <section class="mx-auto shadow-[2px_2px_10px_-4px] rounded-lg w-[700px] py-4 px-2 mt-10">
-        <ul *ngFor="let client of clients" class="w-full">
-            <li class="w-full flex justify-center items- gap-2 flex-col">
-                <label for="">Nombres</label>
-                <Input class="w-full" type="text" pInputText [(ngModel)]="client.name">
-            </li>
-            <li class="w-full flex justify-center items- gap-2 flex-col">
-                <label for="">Apellidos</label>
-                <Input class="w-full" type="text" pInputText [(ngModel)]="client.lastName">
-            </li>
-            <li class="w-full flex justify-center items- gap-2 flex-col">
-                <label for="">Pasaporte</label>
-                <p-inputNumber [(ngModel)]="client.passport" class="w-full"></p-inputNumber>
-            </li>
-            <li class="w-full flex bg-rose-500 justify-center items- gap-2 flex-col">
-                <label for="">Fecha Nacimiento</label>
-                <p-calendar [(ngModel)]="client.birdDate" [style]="{'width':'100%'}"></p-calendar>
-            </li>
-        </ul>
+<section class="min-h-[calc(100vh-116px)] overflow-hidden relative">
+    <app-carousel></app-carousel>
+    <section
+        class="absolute inset-0 m-auto bg-slate-50 h-[400px] w-[min(700px,90%)] mt-20 shadow-[2px_2px_12px_-4px] px-1 py-2 rounded-lg">
+        <form [formGroup]="passengersForm" #myForm="ngForm">
+            <p-tabView [(activeIndex)]="activeIndex" [scrollable]="true">
+                <p-tabPanel *ngFor="let passenger of passengersInfo; let i = index"
+                    [header]="passenger.type | passengerType: i + 1">
+                    <section class="flex justify-center items-center gap-2">
+                        <section class="w-full flex justify-center items- gap-2 flex-col">
+                            <label for="passengerName_{{ i }}">Nombres</label>
+                            <input class="w-full" type="text" [formControlName]="'passengerName_' + i">
+                            <div *ngIf="passengersForm?.get('passengerName_' + i)?.hasError('required') && myForm?.submitted"
+                                class="text-red-500">
+                                Este campo es obligatorio.
+                            </div>
+                        </section>
+                        <section class="w-full flex justify-center items- gap-2 flex-col">
+                            <label for="passengerLastName_{{ i }}">Apellidos</label>
+                            <input class="w-full" type="text" [formControlName]="'passengerLastName_' + i">
+                            <div *ngIf="passengersForm?.get('passengerLastName_' + i)?.hasError('required') && myForm.submitted"
+                                class="text-red-500">
+                                Este campo es obligatorio.
+                            </div>
+                        </section>
+                    </section>
+                    <section class="flex justify-center items-center gap-2">
+                        <section class="w-full flex justify-center items- gap-2 flex-col">
+                            <label for="passengerPassport_{{ i }}">Pasaporte</label>
+                            <p-inputNumber [formControlName]="'passengerPassport_' + i" class="w-full"></p-inputNumber>
+                            <div *ngIf="passengersForm?.get('passengerPassport_' + i)?.hasError('required') && myForm.submitted"
+                                class="text-red-500">
+                                Este campo es obligatorio.
+                            </div>
+                        </section>
+                        <section *ngIf="passenger.type === 'old' || passenger.type === 'infants'"
+                            class="w-full flex justify-center items- gap-2 flex-col">
+                            <label for="passengerBirdDate_{{ i }}">Fecha Nacimiento</label>
+                            <p-calendar [formControlName]="'passengerBirdDate_' + i" class="z-20" [minDate]="minDate"
+                                [maxDate]="maxDate" [style]="{'width':'100%'}"></p-calendar>
+                            <!-- Agrega validaciones adicionales según sea necesario para la fecha de nacimiento -->
+                        </section>
+                    </section>
+                </p-tabPanel>
+            </p-tabView>
+            <button type="submit">
+                submit
+            </button>
+        </form>
     </section>
-
 </section>
 <app-footer></app-footer>
