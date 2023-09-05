@@ -24,8 +24,11 @@ enum ESelectedCostKey {
 export class FlightDetailComponent {
   flight: Flight | undefined;
   flightReturn: Flight | undefined;
+  priceReturn: number = 0;
+  price: number = 0;
   flightToString: string | undefined;
   selectedCostKey: ESelectedCostKey = ESelectedCostKey.costb;
+  selectedCostKeyReturn: ESelectedCostKey = ESelectedCostKey.costb;
   totalPassengers: number = 0;
   seats: Seat[] = [];
   setSelectedSeats: Set<Seat> = new Set();
@@ -35,6 +38,7 @@ export class FlightDetailComponent {
   filtersReturn: Filters | undefined;
   showTableFlight: boolean = false;
   isRoundTrip: boolean = false;
+  numberOfPassengers: number = 0;
   @ViewChild('modalSeats') modalSeats: ElementRef | undefined;
   @ViewChild('contactDetail') contactDetail: ElementRef | undefined;
 
@@ -44,6 +48,17 @@ export class FlightDetailComponent {
   }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      console.log({ params })
+      // check if selectedCostKey is a valid value
+      if (Object.values(ESelectedCostKey).includes(params['selectedCostKey'])) {
+        this.selectedCostKey = params['selectedCostKey'];
+        if (this.flight === undefined || this.flight === null) return;
+        this.tarifa = this.getTarifa(this.selectedCostKey);
+        console.log(this.flight[this.selectedCostKey])
+      }
+    });
+    
     this.flight = this.flightStateService.getSelectedFlight();
     console.log({ flight: this.flight })
 
@@ -68,27 +83,31 @@ export class FlightDetailComponent {
     }
 
     if (this.filters) {
+      console.log('filters', this.filters)
+      console.log('type of adults', typeof this.filters.adults)
+      const { adults, children, old } = this.filters;
+      const totalPassengers = Number(adults) + Number(children) + Number(old);
+      this.numberOfPassengers = totalPassengers;
+
+      if (this.flight && this.selectedCostKey in this.flight) {
+        this.price = this.flight[this.selectedCostKey];
+      }
+
+
+      console.log('numberOfPassengers', this.numberOfPassengers)
       if (this.filters.trip == OPTIONS_TRIP.ROUND_TRIP) {
         this.isRoundTrip = true;
         this.filtersReturn = this.filterStateService.getFiltersReturnSelected();
         console.log({ filtersReturn: this.filtersReturn })
         console.log({ filters: this.filters })
+
         this.showTableFlight = true;
-      }else{
+      } else {
         this.flightStateService.resetReturn();
       }
     }
 
-    this.route.params.subscribe(params => {
-      console.log({ params })
-      // check if selectedCostKey is a valid value
-      if (Object.values(ESelectedCostKey).includes(params['selectedCostKey'])) {
-        this.selectedCostKey = params['selectedCostKey'];
-        if (this.flight === undefined || this.flight === null) return;
-        this.tarifa = this.getTarifa(this.selectedCostKey);
-        console.log(this.flight[this.selectedCostKey])
-      }
-    });
+    
 
 
     // console.log({ filters })
@@ -105,7 +124,6 @@ export class FlightDetailComponent {
     if (key === 'costa') return 'Primera Clase';
     return 'Sin tarifa';
   }
-
   formatDateToString(date: string): string {
     const dateD = new Date(date);
     return formatDate(dateD, 'EEE, d MMM, y', 'es');
@@ -113,9 +131,16 @@ export class FlightDetailComponent {
   getFlightFromChild({ flight, keyFee }: { flight: Flight, keyFee: string }) {
     console.log({ flightFromChild: flight })
     console.log({ keyFee })
+    this.selectedCostKeyReturn = keyFee as ESelectedCostKey;
     this.tarifaReturn = this.getTarifa(keyFee);
     this.flightReturn = flight;
     this.showTableFlight = false;
+    if (this.flightReturn && this.selectedCostKeyReturn in this.flightReturn) {
+      this.priceReturn = this.flightReturn[this.selectedCostKeyReturn];
+    }
+  }
+  rounderByTwoDecimals(value: number): number {
+    return parseFloat(value.toFixed(2))
   }
 
   handleSetClients() {

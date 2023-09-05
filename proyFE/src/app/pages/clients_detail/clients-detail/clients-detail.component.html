@@ -2,24 +2,27 @@
 <section class="min-h-[calc(100vh-116px)] overflow-hidden relative">
     <app-carousel></app-carousel>
     <section
-        class="absolute inset-0 m-auto bg-slate-50 h-[400px] w-[min(700px,90%)] mt-20 shadow-[2px_2px_12px_-4px] px-1 py-2 rounded-lg">
-        <form [formGroup]="passengersForm" #myForm="ngForm">
+        class="absolute inset-0 m-auto h-max w-[min(700px,90%)] mt-20 shadow-[2px_2px_12px_-4px] rounded-lg bg-slate-50">
+        <form (submit)="handleSubmit()" [formGroup]="passengersForm" #myForm="ngForm" class=" h-max w-full">
             <p-tabView [(activeIndex)]="activeIndex" [scrollable]="true">
                 <p-tabPanel *ngFor="let passenger of passengersInfo; let i = index"
-                    [header]="passenger.type | passengerType: i + 1">
+                    [header]="passenger.type"
+                    [style]="{'background-color': 'var(--primary-color)'}">
                     <section class="flex justify-center items-center gap-2">
                         <section class="w-full flex justify-center items- gap-2 flex-col">
-                            <label for="passengerName_{{ i }}">Nombres</label>
-                            <input class="w-full" type="text" [formControlName]="'passengerName_' + i">
-                            <div *ngIf="passengersForm?.get('passengerName_' + i)?.hasError('required') && myForm?.submitted"
+                            <label for="{{passenger.type}}_name_{{ i }}">Nombres</label>
+                            <input pInputText class="w-full" type="text"
+                                [formControlName]="passenger.type+'_name_' + i">
+                            <div *ngIf="passengersForm?.get(passenger.type+'_name_' + i)?.hasError('required') && myForm?.submitted"
                                 class="text-red-500">
                                 Este campo es obligatorio.
                             </div>
                         </section>
                         <section class="w-full flex justify-center items- gap-2 flex-col">
-                            <label for="passengerLastName_{{ i }}">Apellidos</label>
-                            <input class="w-full" type="text" [formControlName]="'passengerLastName_' + i">
-                            <div *ngIf="passengersForm?.get('passengerLastName_' + i)?.hasError('required') && myForm.submitted"
+                            <label for="{{passenger.type}}_lastName_{{ i }}">Apellidos</label>
+                            <input pInputText class="w-full" type="text"
+                                [formControlName]="passenger.type+'_lastName_' + i">
+                            <div *ngIf="passengersForm?.get(passenger.type+'_lastName_' + i)?.hasError('required') && myForm.submitted"
                                 class="text-red-500">
                                 Este campo es obligatorio.
                             </div>
@@ -27,26 +30,60 @@
                     </section>
                     <section class="flex justify-center items-center gap-2">
                         <section class="w-full flex justify-center items- gap-2 flex-col">
-                            <label for="passengerPassport_{{ i }}">Pasaporte</label>
-                            <p-inputNumber [formControlName]="'passengerPassport_' + i" class="w-full"></p-inputNumber>
-                            <div *ngIf="passengersForm?.get('passengerPassport_' + i)?.hasError('required') && myForm.submitted"
+                            <label for="{{passenger.type}}_passport_{{ i }}">Pasaporte</label>
+                            <p-inputNumber [useGrouping]="false" [style]="{'width':'min(325px,100%)'}"
+                                [formControlName]="passenger.type+'_passport_' + i" class="w-full"></p-inputNumber>
+                            <div *ngIf="passengersForm?.get(passenger.type+'_passport_' + i)?.hasError('required') && myForm.submitted"
                                 class="text-red-500">
                                 Este campo es obligatorio.
+                            </div>
+                            <div *ngIf="passengersForm?.get(passenger.type+'_passport_' + i)?.hasError('pattern') && myForm.submitted"
+                                class="text-red-500">
+                                No es un pasaporte válido.
                             </div>
                         </section>
                         <section *ngIf="passenger.type === 'old' || passenger.type === 'infants'"
                             class="w-full flex justify-center items- gap-2 flex-col">
-                            <label for="passengerBirdDate_{{ i }}">Fecha Nacimiento</label>
-                            <p-calendar [formControlName]="'passengerBirdDate_' + i" class="z-20" [minDate]="minDate"
-                                [maxDate]="maxDate" [style]="{'width':'100%'}"></p-calendar>
-                            <!-- Agrega validaciones adicionales según sea necesario para la fecha de nacimiento -->
+                            <label for="{{passenger.type}}_birdDate_{{ i }}">Fecha Nacimiento</label>
+                            <p-calendar [formControlName]="passenger.type+'_birdDate_' + i" class="z-20"
+                                [minDate]="minDate" [maxDate]="maxDate" [style]="{'width':'100%'}"></p-calendar>
+                            <div *ngIf="passengersForm?.get(passenger.type+'_birdDate_' + i)?.hasError('required') && myForm.submitted"
+                                class="text-red-500">
+                                Este campo es obligatorio.
+                            </div>
+                        </section>
+                    </section>
+                </p-tabPanel>
+                <p-tabPanel [header]="'Cliente'" [style]="{'background-color': 'var(--primary-color)'}">
+                    <section class="flex justify-center items-center gap-2">
+                        <section class="w-full flex justify-center items- gap-2 flex-col">
+                            <label for="client_tel">Teléfono</label>
+                            <input pInputText class="w-full" type="tel" [formControlName]="'client_tel'">
+                            <div *ngIf="passengersForm?.get('client_tel')?.hasError('required') && myForm?.submitted"
+                                class="text-red-500">
+                                Este campo es obligatorio.
+                            </div>
+                        </section>
+                        <section class="w-full flex justify-center items- gap-2 flex-col">
+                            <label for="client_email">Email</label>
+                            <input pInputText class="w-full" type="email" [formControlName]="'client_email'">
+                            <div *ngIf="passengersForm?.get('client_email')?.hasError('required') && myForm.submitted"
+                                class="text-red-500">
+                                Este campo es obligatorio.
+                            </div>
                         </section>
                     </section>
                 </p-tabPanel>
             </p-tabView>
-            <button type="submit">
-                submit
-            </button>
+            <section
+                class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
+                <button type="submit"
+                    class="w-[280px] cursor-pointer flex justify-center items-center gap-2 duration-300 border border-slate-50 hover:bg-transparent hover:text-slate-50 bg-slate-50 text-slate-900 hover:text-slateborder-slate-50 px-2 py-2.5 rounded-lg mr-2">
+                    <p>Continuar</p>
+                    <img class="w-6 h-6 object-contain hue-rotate-[105deg] invert filter"
+                        src="../../../assets/icons/ticket.svg" alt="">
+                </button>
+            </section>
         </form>
     </section>
 </section>

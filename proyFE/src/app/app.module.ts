@@ -31,7 +31,10 @@ import { TableComponent } from './components/flight/table/table.component';
 import { TabViewModule } from 'primeng/tabview';
 import { PassengerTypePipe } from './pipes/passenger-type.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { SeatsDetailComponent } from './pages/seats-detail/seats-detail/seats-detail.component';
+import { PaymentComponent } from './pages/payment/payment/payment.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+// import { SeatTypePipe } from './pipes/seat-type.pipe';
 // Registra los datos de localización en español
 registerLocaleData(localeEs);
 
@@ -52,7 +55,10 @@ registerLocaleData(localeEs);
     SearchDetailComponent,
     ClientsDetailComponent,
     TableComponent,
-    PassengerTypePipe
+    PassengerTypePipe,
+    // SeatTypePipe,
+    SeatsDetailComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +74,8 @@ registerLocaleData(localeEs);
     InputNumberModule,
     InputTextModule,
     TabViewModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPayPalModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es' }],
   bootstrap: [AppComponent]

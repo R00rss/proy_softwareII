@@ -44,20 +44,23 @@
             <div class="bg-[var(--primary-color)] rounded-lg p-2 text-slate-50">
                 <p class="w-full text-sm font-light">Tarifa {{tarifa}}</p>
             </div>
-            <p class="text-center">${{ flight[selectedCostKey]?flight[selectedCostKey]:'error' }}</p>
+            <p class="text-center text-xs">Precio unitario: ${{rounderByTwoDecimals(price)}}</p>
+            <!-- <p class="text-center text-xs">{{numberOfPassengers}}</p> -->
+            <p class="text-center">${{rounderByTwoDecimals(price*numberOfPassengers) }}</p>
         </div>
     </div>
-    <section *ngIf="flight!==undefined && flight!==null && isRoundTrip ===false" class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
-        <button
-        (click)="handleSetClients()"
+    <section *ngIf="flight!==undefined && flight!==null && isRoundTrip ===false"
+        class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
+        <button (click)="handleSetClients()"
             class="w-[280px] cursor-pointer flex justify-center items-center gap-2 duration-300 border border-slate-50 hover:bg-transparent hover:text-slate-50 bg-slate-50 text-slate-900 hover:text-slateborder-slate-50 px-2 py-2.5 rounded-lg mr-2">
             <p>Continuar</p>
             <img class="w-6 h-6 object-contain hue-rotate-[105deg] invert filter" src="../../../assets/icons/ticket.svg"
                 alt="">
         </button>
     </section>
-    
-    <section *ngIf="flightReturn!==undefined && flightReturn!==null" class="flex justify-start items-center gap-2 p-2 mb-2">
+
+    <section *ngIf="flightReturn!==undefined && flightReturn!==null"
+        class="flex justify-start items-center gap-2 p-2 mb-2">
         <img class="w-8 h-8" src="../../../../assets/icons/plane_off.png" alt="">
         <p class="text-xl font-semibold">
             Salida de {{flightReturn.origin}} a {{flightReturn.destination}} —
@@ -101,14 +104,17 @@
             <div class="bg-[var(--primary-color)] rounded-lg p-2 text-slate-50">
                 <p class="w-full text-sm font-light">Tarifa {{tarifaReturn}}</p>
             </div>
-            <p class="text-center">${{ flightReturn[selectedCostKey]?flightReturn[selectedCostKey]:'error' }}</p>
+            <p class="text-center text-xs">Precio unitario: ${{rounderByTwoDecimals(priceReturn)}}</p>
+            <!-- <p class="text-center text-xs">{{numberOfPassengers}}</p> -->
+            <p class="text-center">${{ rounderByTwoDecimals(priceReturn * numberOfPassengers)}}</p>
         </div>
     </div>
-    
 
-    <section *ngIf="flight!==undefined && flight!==null && flightReturn!==undefined && flightReturn!==null && isRoundTrip ===true" class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
-        <button
-        (click)="handleSetClients()"
+
+    <section
+        *ngIf="flight!==undefined && flight!==null && flightReturn!==undefined && flightReturn!==null && isRoundTrip ===true"
+        class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
+        <button (click)="handleSetClients()"
             class="w-[280px] cursor-pointer flex justify-center items-center gap-2 duration-300 border border-slate-50 hover:bg-transparent hover:text-slate-50 bg-slate-50 text-slate-900 hover:text-slateborder-slate-50 px-2 py-2.5 rounded-lg mr-2">
             <p>Continuar</p>
             <img class="w-6 h-6 object-contain hue-rotate-[105deg] invert filter" src="../../../assets/icons/ticket.svg"
@@ -116,7 +122,8 @@
         </button>
     </section>
 
-<app-table ngClass="w-full" (flightSelectToParent)="getFlightFromChild($event)" [filters]="filtersReturn" *ngIf="showTableFlight" [roundTrip]="true"></app-table>
+    <app-table ngClass="w-full" (flightSelectToParent)="getFlightFromChild($event)" [filters]="filtersReturn"
+        *ngIf="showTableFlight" [roundTrip]="true"></app-table>
 
 </main>
 <!-- <dialog #modalSeats class="mx-auto w-max shadow-[2px_2px_15px_-5px] rounded-md py-2 px-5">

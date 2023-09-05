@@ -5,6 +5,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { FlightDetailComponent } from './pages/flight-detail/flight-detail.component';
 import { SearchDetailComponent } from './pages/search-detail/search-detail/search-detail.component';
 import { ClientsDetailComponent } from './pages/clients_detail/clients-detail/clients-detail.component';
+import { SeatsDetailComponent } from './pages/seats-detail/seats-detail/seats-detail.component';
+import { PaymentComponent } from './pages/payment/payment/payment.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'flight_detail/:selectedCostKey', component: FlightDetailComponent },
   { path: 'detalle_vuelo/:selectedCostKey', component: FlightDetailComponent },
   { path: 'clients_detail', component: ClientsDetailComponent },
+  { path: 'seats_detail', component: SeatsDetailComponent },
+  { path: 'payment', component: PaymentComponent },
   // { path: 'flightDetail', component: FlightDetailComponent },
   { path: '**', component: NotFoundComponent }
 ];

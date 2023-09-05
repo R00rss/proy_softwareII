@@ -161,6 +161,30 @@ def read_flight(plane_id: str, db: Session = Depends(get_db)):
     return db_flight
 
 
+@app.get("/plane_seat")
+def get_planes(db: Session = Depends(get_db)):
+    db_flight = db.query(models.AirplaneSeat).all()
+    if db_flight is None:
+        raise HTTPException(status_code=404, detail="Flight not found")
+    return db_flight
+
+
+@app.put("/plane_seat/list")
+def get_planes(db: Session = Depends(get_db), list: List[schemas.AirplaneSeat] = []):
+    for item in list:
+        db_flight = (
+            db.query(models.AirplaneSeat)
+            .filter(models.AirplaneSeat.id == item.id)
+            .first()
+        )
+        if db_flight is None:
+            raise HTTPException(status_code=404, detail="Flight not found")
+        db_flight.seat_status = item.seat_status
+        db.commit()
+        db.refresh(db_flight)
+    return db_flight
+
+
 @app.post("/flights/", response_model=schemas.Flight)
 def create_flight(flight: schemas.FlightCreate, db: Session = Depends(get_db)):
     db_flight = models.Flight(**flight.dict())

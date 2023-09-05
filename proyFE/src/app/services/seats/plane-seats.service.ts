@@ -20,4 +20,10 @@ export class PlaneSeatsService {
   getSeatsByPlaneId(plane_id: string): Observable<Seat[]> {
     return this.http.get<Seat[]>(`${this.seatUrl}/${plane_id}`)
   }
+  getSeats(){
+    return this.http.get<Seat[]>(this.seatUrl)
+  }
+  updateSeats(seats: Seat[]): Observable<Seat[]> {
+    return this.http.put<Seat[]>(this.seatUrl+"/list", seats)
+  }
 }

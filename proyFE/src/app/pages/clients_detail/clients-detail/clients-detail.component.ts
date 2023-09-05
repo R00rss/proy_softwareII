@@ -5,6 +5,7 @@ import { ClientService } from 'src/app/services/states/client/client.service';
 import { FilterStateService, Filters } from 'src/app/services/states/filter/filter-state.service';
 import { Client, FlightStateService } from 'src/app/services/states/flight/flight-state.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PassengersService } from 'src/app/services/states/passengers/passengers.service';
 
 @Component({
   selector: 'app-clients-detail',
@@ -29,36 +30,63 @@ export class ClientsDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private flightStateService: FlightStateService,
     private filterStateService: FilterStateService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private passengersService: PassengersService,
+    private router: Router
   ) {
     const currentDate = new Date();
     this.minDate = new Date(currentDate.getFullYear() - 65, currentDate.getMonth(), currentDate.getDate());
     this.maxDate = currentDate;
 
-    this.passengersForm = this.fb.group({});
-    const auxArray = Array(25).fill(0).map((_, i) => i);
-    auxArray.forEach((index) => {
-      const passengerName = 'passengerName_' + index;
-      const passengerLastName = 'passengerLastName_' + index;
-      const passengerPassport = 'passengerPassport_' + index;
-      const passengerBirdDate = 'passengerBirdDate_' + index;
-      this.passengersForm.addControl(passengerName, this.fb.control('', Validators.required));
-      this.passengersForm.addControl(passengerLastName, this.fb.control('', Validators.required));
-      this.passengersForm.addControl(passengerPassport, this.fb.control('', Validators.required));
-      this.passengersForm.addControl(passengerBirdDate, this.fb.control('', Validators.required));
-    });
-  }
+    const filters = this.filterStateService.getFiltersSelected();
+    if (filters) {
+      this.filterStateService.reset();
 
-  submitForm() {
-    if (this.passengersForm.valid) {
-      // Todos los campos están llenos y válidos, puedes continuar con el procesamiento.
-      console.log('Formulario válido');
-    } else {
-      // Algunos campos no están llenos o no son válidos, muestra un mensaje de error o toma otra acción apropiada.
-      console.log('Formulario no válido');
+      // const DEFAULT_FILTERS: Filters = {
+      //   trip: 'one-way',
+      //   origin: 'BUE',
+      //   destination: 'MIA',
+      //   dateFrom: new Date(),
+      //   dateTo: undefined,
+      //   old: 0,
+      //   infants: 0,
+      //   children: 0,
+      //   adults: 1,
+      // }
+
+
+      this.passengersInfo = this.mapNumberToPassengers(filters);
+      // this.passengersInfo = this.mapNumberToPassengers(DEFAULT_FILTERS);
+
+
+      this.passengersForm = this.fb.group({});
+      this.passengersInfo.forEach((passenger, i) => {
+        const passengerName = passenger.type + '_name_' + i;
+        const passengerLastName = passenger.type + '_lastName_' + i;
+        const passengerPassport = passenger.type + '_passport_' + i;
+        if (passenger.type === 'infants' || passenger.type === 'old') {
+          const passengerBirdDate = passenger.type + '_birdDate_' + i;
+          this.passengersForm.addControl(passengerBirdDate, this.fb.control('', Validators.required));
+        }
+        this.passengersForm.addControl(passengerName, this.fb.control('', Validators.required));
+        this.passengersForm.addControl(passengerLastName, this.fb.control('', Validators.required));
+        // this.passengersForm.addControl(passengerPassport, this.fb.control('', Validators.required));
+        this.passengersForm.addControl(passengerPassport, this.fb.control('', [Validators.required, Validators.pattern(/^[A-Z0-9]{8}$/)]));
+
+      });
+      this.passengersForm.addControl('client_tel', this.fb.control('', Validators.required));
+      this.passengersForm.addControl('client_email', this.fb.control('', Validators.required));
+    }else{
+      this.passengersForm = this.fb.group({});
     }
   }
 
+  isValidPassportNumber(passportNumber: string): boolean {
+    // Aquí puedes implementar tu lógica de validación, por ejemplo, usando una expresión regular
+    const passportRegex = /^[A-Z0-9]{8}$/; // Un ejemplo simple para pasaportes de 8 caracteres
+    return passportRegex.test(passportNumber);
+  }
+  
   ngOnInit(): void {
     console.log("ngOnInit de clients-detail")
 
@@ -79,23 +107,39 @@ export class ClientsDetailComponent implements OnInit {
       this.filterStateService.reset();
       // return
     }
-    const DEFAULT_FILTERS: Filters = {
-      trip: 'one-way',
-      origin: 'BUE',
-      destination: 'MIA',
-      dateFrom: new Date(),
-      dateTo: undefined,
-      old: 3,
-      infants: 0,
-      children: 0,
-      adults: 1,
-    }
-
 
     this.isRoundTrip = flightReturn === undefined ? false : true;
-    // this.passengersInfo = this.mapNumberToPassengers(filters);
-    this.passengersInfo = this.mapNumberToPassengers(DEFAULT_FILTERS);
-    console.log("passengersInfo: ", this.passengersInfo)
+  }
+  handleSubmit() {
+    console.log("handleSubmit")
+    if (this.passengersForm.valid) {
+      console.log('Formulario válido');
+      const passengersInfo = this.mapFormToPassengers(this.passengersForm);
+      this.passengersService.setSelectedPassenger(passengersInfo);
+      console.log("Passengers:", this.passengersForm)
+      console.log("passengersInfo: ", passengersInfo)
+      this.router.navigate(['/seats_detail']);
+    } else {
+      console.log('Formulario no válido');
+    }
+
+  }
+  mapFormToPassengers(formGroup: FormGroup<any>): PassengerInfo[] {
+    const passengersInfo: PassengerInfo[] = [];
+    this.passengersInfo.forEach((passenger, i) => {
+      const passengerName = passenger.type + '_name_' + i;
+      const passengerLastName = passenger.type + '_lastName_' + i;
+      const passengerPassport = passenger.type + '_passport_' + i;
+      const passengerBirdDate = passenger.type + '_birdDate_' + i;
+      passengersInfo.push({
+        name: formGroup.get(passengerName)?.value,
+        lastName: formGroup.get(passengerLastName)?.value,
+        passport: formGroup.get(passengerPassport)?.value,
+        type: passenger.type,
+        birdDate: formGroup.get(passengerBirdDate)?.value,
+      })
+    });
+    return passengersInfo;
   }
 
   mapNumberToPassengers(filters: Filters): PassengerInfo[] {
