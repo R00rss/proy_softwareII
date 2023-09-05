@@ -5,7 +5,8 @@ import uvicorn
 from database.database import SessionLocal
 from fastapi.middleware.cors import CORSMiddleware
 from database import models, schemas
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
+from sqlalchemy import func, case
 from typing import List
 from datetime import datetime
 import schemas as schemasResponse
@@ -105,6 +106,10 @@ def search_flights(
     dateTo: datetime = Query(None),
     origin: str = Query(None),
     destination: str = Query(None),
+    adults: int = 0,
+    children: int = 0,
+    infants: int = 0,
+    old: int = 0,
     skip: int = 0,
     limit: int = 100,
 ):
@@ -119,6 +124,19 @@ def search_flights(
     if destination:
         query = query.filter(models.Flight.destination == destination)
 
+    total_seats = adults + children + infants + old
+    if total_seats > 0:
+        Subquery = (
+            db.query(models.Flight.id)
+            .join(models.Flight.plane)
+            .join(models.AirplaneSeat)
+            .filter(models.AirplaneSeat.seat_status == "Available")
+            .group_by(models.Flight.id)
+            .having(func.count(models.AirplaneSeat.id) > total_seats)
+            .subquery()
+        )
+        query = query.filter(models.Flight.id.in_(Subquery))
+
     total_count = query.count()
 
     db_flights = query.offset(skip).limit(limit).all()
@@ -129,6 +147,18 @@ def search_flights(
     return schemasResponse.DataAndCount[schemas.Flight](
         data=db_flights, count=total_count
     )
+
+
+@app.get("/plane_seat/{plane_id}")
+def read_flight(plane_id: str, db: Session = Depends(get_db)):
+    db_flight = (
+        db.query(models.AirplaneSeat)
+        .filter(models.AirplaneSeat.plane_id == plane_id)
+        .all()
+    )
+    if db_flight is None:
+        raise HTTPException(status_code=404, detail="Flight not found")
+    return db_flight
 
 
 @app.post("/flights/", response_model=schemas.Flight)

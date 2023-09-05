@@ -1,83 +1,68 @@
-<head class="bg-[#ffffff] mx-auto flex gap-2 rounded-2xl px-3 py-2 w-full">
-    <section
-        class="flex flex-col gap-3 text-[#75135d] w-[260px] shadow-[0px_0px_3px_-1px] rounded-lg rounded-r-none p-2">
-        <h2 class="text-xl font-medium">¿Como viajas?</h2>
-        <p-dropdown [style]="{'width':'100%'}" [options]="tripOptions" [(ngModel)]="selectedTrip"
-            optionLabel="name"></p-dropdown>
-    </section>
-    <section class="flex flex-col gap-3 text-[#75135d] w-[420px] shadow-[0px_0px_3px_-1px] p-2">
-        <h2 class="text-xl font-medium">¿A dónde viajas?</h2>
-        <section class="flex flex-row gap-1">
-            <p-dropdown class="w-full" placeholder="Desde" [style]="{'width':'100%'}" [options]="destinationOptions"
-                [(ngModel)]="selectedOrigin" optionLabel="name"></p-dropdown>
-            <div class="cursor-pointer group flex justify-center items-center">
-                <i
-                    class="duration-300 filter group-hover:hue-rotate-30 group-hover:drop-shadow-[0px_0px_5px_#75135d] pi pi-arrows-h text-xl"></i>
-            </div>
-            <p-dropdown class="w-full" placeholder="Hacia" [style]="{'width':'100%'}" [options]="destinationOptions"
-                [(ngModel)]="selectedDestination" optionLabel="name">
-            </p-dropdown>
-        </section>
-    </section>
-    <section class="flex flex-col gap-3 text-[#75135d] w-[420px] shadow-[0px_0px_3px_-1px] p-2">
-        <h2 class="text-xl font-medium">¿Cuándo viajas?</h2>
-        <section class="flex flex-row gap-2">
-            <p-calendar placeholder="{{selectedTrip?.code===OPTIONS_TRIP.ROUND_TRIP?'Salida':'Fecha de salida'}}"
-                [style]="{'width':'100%'}" [(ngModel)]="selectedFromDate" dateFormat="dd/mm/yy"
-                [showIcon]="true"></p-calendar>
-            <p-calendar *ngIf="selectedTrip?.code===OPTIONS_TRIP.ROUND_TRIP" placeholder="Vuelta"
-                [style]="{'width':'100%'}" [(ngModel)]="selectedToDate" dateFormat="dd/mm/yy"
-                [showIcon]="true"></p-calendar>
-        </section>
-    </section>
-    <section
-        class="flex flex-col gap-3 text-[#75135d] w-[400px] shadow-[0px_0px_3px_-1px] rounded-lg rounded-l-none p-2">
-        <h2 class="text-xl font-medium">¿Con quien viajas?</h2>
-        <div class="w-full border rounded-md h-[36px] flex justify-center items-center py-1 px-2 text-center">
-            <button type="button" (click)="openModalPassengers()" class="px-2 text-[#495057] text-base">Adultos:
-                {{passengers.adults}}, Niños: {{passengers.children}}, Bebés: {{passengers.infants}}</button>
+<section [style.bottom]="bottom+'px'"
+    [ngClass]="{'ml-20 -translate-x-1/2 absolute left-1/2':absolute, 'mx-auto fixed top-[73px] left-1/2 -translate-x-1/2 z-10':!absolute}"
+    class="filter-bar-container w_standard max-h-[120px]">
+    <p [ngClass]="{'hidden': !absolute}"
+        class="bg-[var(--primary-color)] w-max rounded-[20px_20px_0px_0px] px-4 py-1 text-2xl font-semibold text-slate-100">
+        Reservar tu vuelo</p>
+    <section [ngClass]="{'shadow-[0px_0px_10px_2px]':!absolute,'rounded-[0px_0px_20px_20px]':!absolute}"
+        class="bg-[var(--primary-color)] pl-2 pb-2 rounded-[0px_20px_20px_20px]">
+        <div class="shadow-[-2px_-2px_10px_-4px_#ffffff]"
+            [ngClass]="{'rounded-[20px]':absolute,'rounded-[0px_0px_20px_20px]':!absolute}">
+            <main class="bg-[#ffffff] mx-auto flex gap-2 px-3 py-2 w-full"
+                [ngClass]="{'rounded-[16px]':absolute,'rounded-[0px_0px_16px_16px]':!absolute}">
+                <section
+                    class="flex flex-col gap-3 text-[#75135d] text-xs w-[200px] shadow-[0px_0px_3px_-1px] rounded-lg rounded-r-none p-2">
+                    <h2 class="text-xl font-medium">¿Como viajas?</h2>
+                    <p-dropdown [style]="{'width':'100%'}" [options]="tripOptions" [(ngModel)]="selectedTrip"
+                        optionLabel="name"></p-dropdown>
+                </section>
+                <section class="flex flex-col gap-3 text-[#75135d] text-xs w-[500px] shadow-[0px_0px_3px_-1px] p-2">
+                    <h2 class="text-xl font-medium">¿A dónde viajas?</h2>
+                    <section class="flex flex-row gap-1">
+                        <p-dropdown class="w-full" placeholder="Desde" [style]="{'width':'100%'}"
+                            [options]="destinationOptions" [(ngModel)]="selectedOrigin" optionLabel="name"></p-dropdown>
+                        <div class="cursor-pointer group flex justify-center items-center">
+                            <i
+                                class="duration-300 filter group-hover:hue-rotate-30 group-hover:drop-shadow-[0px_0px_5px_#75135d] pi pi-arrows-h text-xl"></i>
+                        </div>
+                        <p-dropdown class="w-full" placeholder="Hacia" [style]="{'width':'100%'}"
+                            [options]="destinationOptions" [(ngModel)]="selectedDestination" optionLabel="name">
+                        </p-dropdown>
+                    </section>
+                </section>
+                <section class="flex flex-col gap-3 text-[#75135d] text-xs w-[310px] shadow-[0px_0px_3px_-1px] p-2">
+                    <h2 class="text-xl font-medium">¿Cuándo viajas?</h2>
+                    <section class="flex flex-row gap-2">
+                        <p-calendar
+                            placeholder="{{selectedTrip?.code===OPTIONS_TRIP.ROUND_TRIP?'Salida':'Fecha de salida'}}"
+                            [style]="{'width':'100%'}" [(ngModel)]="selectedFromDate" dateFormat="dd/mm/yy"
+                            [showIcon]="true"></p-calendar>
+                        <p-calendar *ngIf="selectedTrip?.code===OPTIONS_TRIP.ROUND_TRIP" placeholder="Vuelta"
+                            [style]="{'width':'100%'}" [(ngModel)]="selectedToDate" dateFormat="dd/mm/yy"
+                            [showIcon]="true"></p-calendar>
+                    </section>
+                </section>
+                <section
+                    class="flex flex-col gap-3 text-[#75135d] w-[370px] shadow-[0px_0px_3px_-1px] rounded-lg rounded-l-none p-2">
+                    <h2 class="text-xl font-medium">¿Con quien viajas?</h2>
+                    <div
+                        class="w-full border rounded-md h-[36px] flex justify-center text-sm items-center py-1 px-0.5">
+                        <button type="button" (click)="openModalPassengers()"
+                            class="text-[#495057] w-full">
+                            Adultos Mayores: {{passengers.old}},
+                            Adultos: {{passengers.adults}}, Niños: {{passengers.children}}, Bebés: {{passengers.infants}}</button>
+                    </div>
+                </section>
+                <section class="flex flex-col justify-end gap-1 text-base font-medium">
+                    <button id="searchFlightButton" (click)="searchFlights()"
+                        class="mb-2 w-32 flex justify-center items-center gap-2 duration-300 border border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg mx-auto">
+                        <p>Buscar</p>
+                        <i class="pi pi-search"></i>
+                    </button>
+                </section>
+            </main>
         </div>
     </section>
-    <section class="flex flex-col justify-end gap-1 text-base font-medium">
-        <button id="searchFlightButton" (click)="searchFlights()"
-            class="mb-2 w-32 flex justify-center items-center gap-2 duration-300 border border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg mx-auto">
-            <p>Buscar</p>
-            <i class="pi pi-search"></i>
-        </button>
-    </section>
-</head>
-<div id="flightsTableContainer" *ngIf="listAndCountFlights&&listAndCountFlights.count>0"></div>
-<main *ngIf="listAndCountFlights&&listAndCountFlights.count>0" class="w-[min(90%,1200px)] mx-auto mt-4 text-sm">
-    <p-table selectionMode="single" dataKey="id" [(selection)]="selectedFlight" [value]="listAndCountFlights.data"
-        [paginator]="true" [rows]="5" [showCurrentPageReport]="false"
-        currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} registros"
-        [rowsPerPageOptions]="[10, 25, 50]">
-        <ng-template pTemplate="header">
-            <tr>
-                <th *ngFor="let column of columns; let firstIteration = first" [style]="{'width':column.width}">
-                    <section class="flex justify-start items-center gap-2">
-                        <p>{{column.name}}</p>
-                        <section
-                            class="flex justify-center items-center h-7 w-7 cursor-pointer rounded-full p-0.5 bg-[var(--primary-color)] hover:bg-slate-200 duration-500 hover:text-[var(--primary-color)]">
-                            <i *ngIf="!firstIteration" class="pi pi-sort-amount-down-alt"></i>
-                        </section>
-                    </section>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-flight let-index="rowIndex">
-            <tr id="{{getValidSelectorByUUID(flight.id)}}" style="cursor: pointer;" (click)="flightSelect(flight)">
-                <td style="text-align: center;" class="w-[5%]">{{ index + 1 }}</td>
-                <td class="w-[22%]">{{ flight.origin }}</td>
-                <td class="w-[22%]">{{ flight.destination }}</td>
-                <td class="w-[22%]">{{ flight.departure |date:'dd/MM/yyyy HH:mm' }}</td>
-                <td class="w-[22%]">{{ flight.arrival |date:'dd/MM/yyyy HH:mm' }}</td>
-            </tr>
-        </ng-template>
-    </p-table>
-</main>
-<section *ngIf="listAndCountFlights&&listAndCountFlights.count<=0" class="flex flex-col justify-center items-center">
-    <p>No se encontraron vuelos</p>
 </section>
 <dialog #modalPassengers class="mx-auto w-max shadow-[2px_2px_15px_-5px] rounded-md py-2 px-5">
     <button class="absolute top-2 right-2" (click)="closeModalPassengers()"><i class="pi pi-times text-xl"></i></button>
@@ -86,15 +71,22 @@
     </header>
     <main class="flex flex-col gap-4 justify-center items-center">
         <section>
+            <h2 class="font-medium">Adultos Mayores</h2>
+            <p class="text-sm text-slate-500 mb-2">Mayores de 65 años <span>*</span></p>
+            <p-inputNumber decrementButtonClass="p-button-add-secondary" incrementButtonClass="p-button-add-secondary"
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [showButtons]="true"
+                [(ngModel)]="passengers.old" [min]="0" [max]="5"></p-inputNumber>
+        </section>
+        <section>
             <h2 class="font-medium">Adultos</h2>
-            <p class="text-sm text-slate-500 mb-2">Igual o mayores de 12 años <span>*</span></p>
+            <p class="text-sm text-slate-500 mb-2">26 - 65 años <span>*</span></p>
             <p-inputNumber decrementButtonClass="p-button-add-secondary" incrementButtonClass="p-button-add-secondary"
                 incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [showButtons]="true"
                 [(ngModel)]="passengers.adults" [min]="1" [max]="5"></p-inputNumber>
         </section>
         <section>
             <h2>Niños</h2>
-            <p class="text-sm text-slate-500 mb-2">2 - 11 años <span>*</span></p>
+            <p class="text-sm text-slate-500 mb-2">3- 25 años <span>*</span></p>
             <p-inputNumber decrementButtonClass="p-button-add-secondary" incrementButtonClass="p-button-add-secondary"
                 incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0" [max]="5"
                 [showButtons]="true" [(ngModel)]="passengers.children"></p-inputNumber>
@@ -106,6 +98,8 @@
                 incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [min]="0" [max]="5"
                 [showButtons]="true" [(ngModel)]="passengers.infants"></p-inputNumber>
         </section>
-        <button  class="mb-2 w-full flex justify-center items-center gap-2 duration-300 border border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg" (click)="confirmPassengers()">Confirmar</button>
+        <button
+            class="mb-2 w-full flex justify-center items-center gap-2 duration-300 border border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg"
+            (click)="confirmPassengers()">Confirmar</button>
     </main>
 </dialog>

@@ -5,6 +5,7 @@ from sqlalchemy import (
     Float,
     DateTime,
     ForeignKey,
+    Boolean,
     UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import UUID
@@ -101,7 +102,10 @@ class Flight(Base):
     destination = Column(String, nullable=False)
     departure = Column(DateTime, nullable=False)
     arrival = Column(DateTime, nullable=False)
-
+    cost = Column(Float, nullable=False)
+    costa = Column(Float, nullable=False)
+    costb = Column(Float, nullable=False)
+    direct = Column(Boolean, nullable=False)
     plane = relationship("Plane", back_populates="flights")
     pilot = relationship("Pilot", back_populates="flights")
     reservations = relationship("Reservation", back_populates="flight")

@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS flight (
     destination varchar(255) NOT NULL,
     departure timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     arrival timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    cost decimal(10, 2) NOT NULL,
     CONSTRAINT fk_flight_plane FOREIGN KEY (plane_id) REFERENCES plane (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_flight_pilot FOREIGN KEY (pilot_id) REFERENCES pilot (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_flight_airport_origin FOREIGN KEY (airport_origin_id) REFERENCES airport (id) ON DELETE CASCADE ON UPDATE CASCADE,

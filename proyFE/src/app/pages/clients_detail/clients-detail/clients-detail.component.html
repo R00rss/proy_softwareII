@@ -1,0 +1,25 @@
+<app-navbar></app-navbar>
+<section class="min-h-[calc(100vh-200px)]">
+    <section class="mx-auto shadow-[2px_2px_10px_-4px] rounded-lg w-[700px] py-4 px-2 mt-10">
+        <ul *ngFor="let client of clients" class="w-full">
+            <li class="w-full flex justify-center items- gap-2 flex-col">
+                <label for="">Nombres</label>
+                <Input class="w-full" type="text" pInputText [(ngModel)]="client.name">
+            </li>
+            <li class="w-full flex justify-center items- gap-2 flex-col">
+                <label for="">Apellidos</label>
+                <Input class="w-full" type="text" pInputText [(ngModel)]="client.lastName">
+            </li>
+            <li class="w-full flex justify-center items- gap-2 flex-col">
+                <label for="">Pasaporte</label>
+                <p-inputNumber [(ngModel)]="client.passport" class="w-full"></p-inputNumber>
+            </li>
+            <li class="w-full flex bg-rose-500 justify-center items- gap-2 flex-col">
+                <label for="">Fecha Nacimiento</label>
+                <p-calendar [(ngModel)]="client.birdDate" [style]="{'width':'100%'}"></p-calendar>
+            </li>
+        </ul>
+    </section>
+
+</section>
+<app-footer></app-footer>

@@ -14,7 +14,7 @@
     --primary-color-85: #75135d85;
     --secondary-color-85: #3278db85;
     --tertiary-color-85: #67e8f985;
-    --primary-color: #75135d;
+    --primary-color: #770085;
     --secondary-color: #3278db;
     --tertiary-color: #67e8f9;
     --primary-gray: #b0dee1;
@@ -89,6 +89,9 @@
     color: var(--primary-color) !important;
 }
 
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.65);
+}
 
 .bg_gradient_cyan {
     background: linear-gradient(90deg,

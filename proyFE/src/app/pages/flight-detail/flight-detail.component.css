@@ -1,0 +1,7 @@
+.container_seats {
+    /* las dos primeras filas de 5 asientos y las demas de 7 asientos  con grid*/
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 10px;
+}

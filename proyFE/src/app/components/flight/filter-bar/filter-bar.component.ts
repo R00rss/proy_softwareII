@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DEFAULT_PASSENGERS, OPTIONS_TRIP } from 'src/app/constants/filters';
 import { ICON_SORT_TYPE } from 'src/app/constants/global';
 import { Column, ListAndCount } from 'src/app/model/global';
@@ -10,6 +10,10 @@ import { FlightStateService } from 'src/app/services/states/flight/flight-state.
 import { Router } from '@angular/router';
 import { FILTER_MESSAGES } from 'src/app/constants/messages';
 import { Passengers } from 'src/app/model/passengers';
+import { FilterStateService, Filters } from 'src/app/services/states/filter/filter-state.service';
+import { forkJoin } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-filter-bar',
@@ -19,47 +23,52 @@ import { Passengers } from 'src/app/model/passengers';
 export class FilterBarComponent implements OnInit {
 
   @ViewChild('modalPassengers') modalPassengers: ElementRef | undefined;
+  @Input() bottom: number = 0;
+  @Input() filters: Filters | undefined;
+  @Input() absolute: boolean = false;
 
   constructor(
     public airportsService: AirportsService,
     public flightsService: FlightsService,
     private blockGUIService: BlockGUIService,
     private messagesService: MessagesService,
-    private flightStateService: FlightStateService,
+    private filterStateService: FilterStateService,
     private router: Router
   ) { }
   destinations: Destinations[] = [];
   ngOnInit(): void {
     this.setColumns()
-    this.airportsService.getDestinationsCombo().subscribe(
+    console.log({ filters: this.filters })
+    forkJoin({
+      destinations: this.airportsService.getDestinationsCombo(),
+      tripOptions: this.airportsService.getOptionsTrip()
+    }).subscribe(
       {
-        next: (destinationOptions) => {
-          console.log({ destinationOptions })
-          this.destinationOptions = destinationOptions;
-          // if (this.destinationOptions.length > 0) {
-          //   this.selectedDestination = this.destinationOptions[0];
-          //   this.selectedOrigin = this.destinationOptions[0];
-          // }
-        },
-        complete: () => console.info('complete'),
-        error: (err) => console.error({ err })
-      }
-    )
-    this.airportsService.getOptionsTrip().subscribe(
-      {
-        next: (tripOptions) => {
-          console.log({ tripOptions })
+        next: ({ destinations, tripOptions }) => {
+          console.log({ destinations, tripOptions })
+          this.destinationOptions = destinations;
           this.tripOptions = tripOptions;
-          if (this.tripOptions.length > 0) {
-            this.selectedTrip = this.tripOptions[0];
-          }
+          if (this.filters) this.setFilters(this.filters)
         },
-        complete: () => console.info('complete'),
         error: (err) => console.error({ err })
       }
     )
+
   }
 
+  setFilters(filters: Filters) {
+    this.selectedTrip = this.tripOptions.find((trip) => trip.code === filters.trip);
+    this.selectedOrigin = this.destinationOptions.find((destination) => destination.code === filters.origin);
+    this.selectedDestination = this.destinationOptions.find((destination) => destination.code === filters.destination);
+    this.selectedFromDate = new Date(filters.dateFrom);
+    this.selectedToDate = filters.dateTo ? new Date(filters.dateTo) : undefined;
+    this.passengers = {
+      old: filters.adults,
+      adults: filters.adults,
+      children: filters.children,
+      infants: filters.infants
+    }
+  }
 
   OPTIONS_TRIP = OPTIONS_TRIP;
   selectedFromDate: Date | undefined;
@@ -90,7 +99,7 @@ export class FilterBarComponent implements OnInit {
 
     if (this.modalPassengers) this.modalPassengers.nativeElement.close();
   }
-  confirmPassengers(){
+  confirmPassengers() {
     this.closeModalPassengers();
   }
 
@@ -112,18 +121,6 @@ export class FilterBarComponent implements OnInit {
     ]
 
   }
-  flightSelect(flight: Flight) {
-    this.block();
-    this.selectedFlight = flight;
-    this.flightStateService.setSelectedFlight(this.selectedFlight);
-    setTimeout(() => {
-      this.router.navigate(['/flight_detail/2000'])
-      this.unblock();
-    }, 1000);
-  }
-  flightUnselect(flight: Flight) {
-    this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Node Unselected', detail: 'test' })
-  }
   isSelected(flight: Flight) {
     console.log({ flight })
     if (this.selectedFlight === undefined || this.selectedFlight === null) return false;
@@ -142,6 +139,12 @@ export class FilterBarComponent implements OnInit {
       this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_TYPE_TRIP })
       return;
     }
+
+    if (this.selectedOrigin === undefined || this.selectedOrigin === null) {
+      this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_ORIGIN })
+      return;
+    }
+
     if (this.selectedDestination === undefined || this.selectedDestination === null) {
       this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_DESTINATION })
       return;
@@ -153,10 +156,6 @@ export class FilterBarComponent implements OnInit {
       return;
     }
 
-    if (this.selectedOrigin === undefined || this.selectedOrigin === null) {
-      this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.SELECT_ORIGIN })
-      return;
-    }
     if (this.selectedOrigin.code == this.selectedDestination.code) {
       this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.ORIGIN_DESTINATION_NOT_SAME })
       return;
@@ -174,25 +173,56 @@ export class FilterBarComponent implements OnInit {
       }
     }
 
+    const filters: Filters = {
+      trip: this.selectedTrip.code,
+      origin: this.selectedOrigin.code,
+      destination: this.selectedDestination.code,
+      dateFrom: this.selectedFromDate,
+      dateTo: this.selectedTrip.code === OPTIONS_TRIP.ROUND_TRIP ? this.selectedToDate : undefined,
+      adults: this.passengers.adults,
+      old: this.passengers.old,
+      children: this.passengers.children,
+      infants: this.passengers.infants,
+    }
+
+    //  check if filters are the same
+    // const filtersSelected = this.filterStateService.getFiltersSelected();
+    // if (
+    //   filtersSelected && filtersSelected.origin === filters.origin && filtersSelected.destination === filters.destination && filtersSelected.dateFrom.getTime() === filters.dateFrom.getTime() && filtersSelected.dateTo?.getTime() === filters.dateTo?.getTime()
+    //     && filtersSelected.adults === filters.adults && filtersSelected.children === filters.children && filtersSelected.infants === filters.infants
+    //   ) {
+    //   // this.messagesService.showMessageWithContent({ severity: 'info', summary: 'Alerta', detail: FILTER_MESSAGES.FILTERS_ARE_THE_SAME })
+    //   return;
+    // }
     this.block();
-    this.listAndCountFlights = undefined;
-    this.flightsService.searchFlights({ skip: 0, limit: 100, dateFrom: this.selectedFromDate, dateTo: this.selectedTrip.code === OPTIONS_TRIP.ROUND_TRIP ? this.selectedToDate : undefined, destination: this.selectedDestination.code, origin: this.selectedOrigin.code }).subscribe(
-      {
-        next: (listAndCountFlights) => {
-          console.log({ listAndCountFlights })
-          this.listAndCountFlights = listAndCountFlights;
-        },
-        complete: () => {
-          console.info('complete')
-          this.unblock()
-          this.messagesService.showMessageWithContent({ severity: 'success', summary: 'Éxito', detail: 'Búsqueda Finalizada' })
-          // wait 1 seconds and hide message
-          setTimeout(() => {
-            this.messagesService.hideMessage()
-          }, 2000);
-        },
-        error: (err) => console.error({ err })
-      }
-    )
+    // wait 3 seconds and continue
+    setTimeout(() => {
+      this.unblock();
+    }, 700);
+    this.filterStateService.setFiltersSelected(filters)
+    this.router.navigate(['/search_detail'], { queryParams: filters });
+
+
+
+    // this.block();
+    // this.listAndCountFlights = undefined;
+    // this.flightsService.searchFlights({ skip: 0, limit: 100, dateFrom: this.selectedFromDate, dateTo: this.selectedTrip.code === OPTIONS_TRIP.ROUND_TRIP ? this.selectedToDate : undefined, destination: this.selectedDestination.code, origin: this.selectedOrigin.code }).subscribe(
+    //   {
+    //     next: (listAndCountFlights) => {
+    //       console.log({ listAndCountFlights })
+    //       this.listAndCountFlights = listAndCountFlights;
+    //     },
+    //     complete: () => {
+    //       console.info('complete')
+    //       this.unblock()
+    //       this.messagesService.showMessageWithContent({ severity: 'success', summary: 'Éxito', detail: 'Búsqueda Finalizada' })
+    //       // wait 1 seconds and hide message
+    //       setTimeout(() => {
+    //         this.messagesService.hideMessage()
+    //       }, 2000);
+    //     },
+    //     error: (err) => console.error({ err })
+    //   }
+    // )
   }
 }

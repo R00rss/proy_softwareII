@@ -1,93 +1,163 @@
 <app-navbar></app-navbar>
-<main class="min-h-[calc(100vh-116px)]">
-
-    <section class="px-4 py-2">
-        <h1 class="border-b-2 w-[200px] border-[var(--primary-color)]">Detalle de Vuelo</h1>
+<main class="min-h-[calc(100vh-116px)] w-[min(90%,1200px)] mx-auto flex flex-col gap-0 justify-start items-center">
+    <section *ngIf="flight!==undefined && flight!==null" class="flex justify-start items-center gap-2 p-2 mb-2">
+        <img class="w-8 h-8" src="../../../../assets/icons/plane_off.png" alt="">
+        <p class="text-xl font-semibold">
+            Salida de {{flight.origin}} a {{flight.destination}} —
+            {{flight.departure?formatDateToString(flight.departure):''}}
+            {{flight.arrival?'a':''}}
+            {{ flight.arrival?formatDateToString(flight.arrival):'' }}
+        </p>
     </section>
-    <ul *ngIf="flight!==undefined && flight !==null"
-        class="mb-8 mt-5 py-2 px-4 flex flex-col gap-4 w-[min(90%,900px)] mx-auto shadow-[2px_2px_14px_-2px_#75135d]">
-        <li class="flex justify-center gap-2">
-            <h2 class="text-[var(--primary-color)] font-semibold">Código de vuelo:</h2>
-            <p>{{flight.id}}</p>
-        </li>
-        <li class="flex flex-col justify-center gap-1">
-            <header class="flex gap-2 items-center">
-                <h2 class="text-[var(--primary-color)] font-semibold">Origen</h2>
-                <p>{{ flight.departure |date:'dd/MM/yyyy HH:mm'}}</p>
-            </header>
-            <ul class="ml-3 text-sm">
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Ciudad:</h3>
-                    <p>{{flight.airport_origin.city}}</p>
-                </li>
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">País:</h3>
-                    <p>{{flight.airport_origin.country}}</p>
-                </li>
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Aeropuerto:</h3>
-                    <p>{{flight.airport_origin.name}}</p>
-                </li>
-            </ul>
-        </li>
-        <li class="flex flex-col justify-center">
-            <header class="flex gap-2 items-center">
-                <h2 class="text-[var(--primary-color)] font-semibold">Destino</h2>
-                <p>{{ flight.arrival |date:'dd/MM/yyyy HH:mm'}}</p>
-            </header>
-            <ul class="ml-3 text-sm">
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Ciudad:</h3>
-                    <p>{{flight.airport_destination.city}}</p>
-                </li>
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">País:</h3>
-                    <p>{{flight.airport_destination.country}}</p>
-                </li>
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Aeropuerto:</h3>
-                    <p>{{flight.airport_destination.name}}</p>
-                </li>
-            </ul>
-        </li>
-        <li *ngIf="moreInformation" class="flex flex-col justify-center">
-            <header class="flex gap-2 items-center">
-                <h2 class="text-[var(--primary-color)] font-semibold">Información del avion</h2>
-            </header>
-            <ul class="ml-3 text-sm">
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Piloto:</h3>
-                    <p>{{flight.pilot.name}} {{flight.pilot.lastname}}</p>
-                </li>
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Modelo:</h3>
-                    <p>{{flight.plane.model}}</p>
-                </li>
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Capacidad:</h3>
-                    <p>{{flight.plane.capacity}}</p>
-                </li>
-                <li class="flex justify-start gap-1 items-center">
-                    <h3 class="text-[var(--primary-color)] font-semibold">Numero de serie:</h3>
-                    <p>{{flight.plane.serial_number}}</p>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <button (click)="handleMoreInformation()"
-                class="cursor-pointer flex justify-center items-center gap-2 duration-300 border-2 border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-0.5 rounded-lg">
-                <p>Mas</p>
-                <i [ngClass]="{'rotate-180':moreInformation}" class="duration-300 pi pi-chevron-down"></i>
-            </button>
-        </li>
-    </ul>
-    <section class="mt-4 flex justify-center items-center gap-2">
-        <a class="cursor-pointer w-32 flex justify-center items-center gap-2 duration-300 border-2 border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg"
-            href="/">Regresar</a>
-        <a
-            class="cursor-pointer w-32 flex justify-center items-center gap-2 duration-300 border-2 border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg">Siguiente</a>
+    <div *ngIf="flight!==undefined && flight!==null" class="cursor-pointer hover:shadow-[0px_0px_20px_0px_var(--primary-color)] duration-300
+        shadow-[0px_0px_10px_-6px] flex gap-2 h-40 items-center py-4 mx-auto w-full">
 
+        <section class="w-[75%] flex justify-between items-center px-10">
+            <div class="flex flex-col justify-center items-center gap-1">
+                <p class="text-xl font-bold">{{ flight.departure |date:'HH:mm ' }}</p>
+                <p class="text-lg font-extralight">{{ flight.origin }}</p>
+            </div>
+            <div class="w-full flex flex-col gap-2 justify-center items-center">
+                <section class="w-full flex justify-center items-center text-slate-600 text-xs gap-5">
+                    <div class="flex justify-center items-center gap-2">
+                        <p>{{ flight.direct===true?'Directo':'Escalado' }}</p>
+                        -
+                        <p>{{getDuration(flight.departure,flight.arrival)}}</p>
+                    </div>
+                    <div class="w-[1px] h-3 bg-slate-600"></div>
+                </section>
+                <section class="w-full py-2 px-3 flex justify-center items-center">
+                    <div class="w-full h-[1px] bg-slate-400"></div>
+                    <img class="w-5 h-5 object-contain invert-[0.6] mx-4" src="../../../../assets/icons/plane_off.png"
+                        alt="">
+                    <div class="w-full h-[1px] bg-slate-400"></div>
+                </section>
+                <p class="text-slate-600 text-xs">Incluye trayecto operado por Horizon Jet</p>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-1">
+                <p class="text-xl font-bold">{{ flight.arrival |date:'HH:mm' }}</p>
+                <p class="text-lg font-extralight">{{ flight.destination }}</p>
+            </div>
+        </section>
+        <div class="w-[1px] h-full bg-slate-200"></div>
+        <div class="font-semibold text-2xl w-[25%] flex flex-col gap-1 justify-center items-center">
+            <div class="bg-[var(--primary-color)] rounded-lg p-2 text-slate-50">
+                <p class="w-full text-sm font-light">Tarifa {{tarifa}}</p>
+            </div>
+            <p class="text-center">${{ flight[selectedCostKey]?flight[selectedCostKey]:'error' }}</p>
+        </div>
+    </div>
+    
+    <section *ngIf="flightReturn!==undefined && flightReturn!==null" class="flex justify-start items-center gap-2 p-2 mb-2">
+        <img class="w-8 h-8" src="../../../../assets/icons/plane_off.png" alt="">
+        <p class="text-xl font-semibold">
+            Salida de {{flightReturn.origin}} a {{flightReturn.destination}} —
+            {{flightReturn.departure?formatDateToString(flightReturn.departure):''}}
+            {{flightReturn.arrival?'a':''}}
+            {{ flightReturn.arrival?formatDateToString(flightReturn.arrival):'' }}
+        </p>
     </section>
+    <div *ngIf="flightReturn!==undefined && flightReturn!==null" class="cursor-pointer hover:shadow-[0px_0px_20px_0px_var(--primary-color)] duration-300
+        shadow-[0px_0px_10px_-6px] flex gap-2 h-40 items-center py-4 mx-auto w-full">
+
+        <section class="w-[75%] flex justify-between items-center px-10">
+            <div class="flex flex-col justify-center items-center gap-1">
+                <p class="text-xl font-bold">{{ flightReturn.departure |date:'HH:mm ' }}</p>
+                <p class="text-lg font-extralight">{{ flightReturn.origin }}</p>
+            </div>
+            <div class="w-full flex flex-col gap-2 justify-center items-center">
+                <section class="w-full flex justify-center items-center text-slate-600 text-xs gap-5">
+                    <div class="flex justify-center items-center gap-2">
+                        <p>{{ flightReturn.direct===true?'Directo':'Escalado' }}</p>
+                        -
+                        <p>{{getDuration(flightReturn.departure,flightReturn.arrival)}}</p>
+                    </div>
+                    <div class="w-[1px] h-3 bg-slate-600"></div>
+                </section>
+                <section class="w-full py-2 px-3 flex justify-center items-center">
+                    <div class="w-full h-[1px] bg-slate-400"></div>
+                    <img class="w-5 h-5 object-contain invert-[0.6] mx-4" src="../../../../assets/icons/plane_off.png"
+                        alt="">
+                    <div class="w-full h-[1px] bg-slate-400"></div>
+                </section>
+                <p class="text-slate-600 text-xs">Incluye trayecto operado por Horizon Jet</p>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-1">
+                <p class="text-xl font-bold">{{ flightReturn.arrival |date:'HH:mm' }}</p>
+                <p class="text-lg font-extralight">{{ flightReturn.destination }}</p>
+            </div>
+        </section>
+        <div class="w-[1px] h-full bg-slate-200"></div>
+        <div class="font-semibold text-2xl w-[25%] flex flex-col gap-1 justify-center items-center">
+            <div class="bg-[var(--primary-color)] rounded-lg p-2 text-slate-50">
+                <p class="w-full text-sm font-light">Tarifa {{tarifaReturn}}</p>
+            </div>
+            <p class="text-center">${{ flightReturn[selectedCostKey]?flightReturn[selectedCostKey]:'error' }}</p>
+        </div>
+    </div>
+
+    <section *ngIf="flight!==undefined && flight!==null && flightReturn!==undefined && flightReturn!==null" class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
+        <button (click)="handleSetClients()"
+            class="w-[280px] flex justify-center items-center gap-2 duration-300 border border-slate-50 hover:bg-transparent hover:text-slate-50 bg-slate-50 text-slate-900 hover:text-slateborder-slate-50 px-2 py-2.5 rounded-lg mr-2">
+            <p>Continuar</p>
+            <img class="w-6 h-6 object-contain hue-rotate-[105deg] invert filter" src="../../../assets/icons/ticket.svg"
+                alt="">
+        </button>
+    </section>
+
+<app-table ngClass="w-full" (flightSelectToParent)="getFlightFromChild($event)" [filters]="filtersReturn" *ngIf="showTableFlight" [roundTrip]="true"></app-table>
 
 </main>
+<!-- <dialog #modalSeats class="mx-auto w-max shadow-[2px_2px_15px_-5px] rounded-md py-2 px-5">
+    <button class="absolute top-2 right-2" (click)="closeModalSeats()"><i class="pi pi-times text-xl"></i></button>
+    <header class=''>
+        <h1 class="mt-5 mb-4 text-2xl font-semibold">Selecciona los Asientos</h1>
+    </header>
+    <main class="flex flex-col gap-4 justify-center items-center">
+        <section class="flex justify-start items-center gap-2 text-sm">
+            <p>Asientos restantes: </p>
+            <p>{{totalPassengers}}</p>
+        </section>
+        <ul class="container_seats">
+            <li *ngFor="let seat of seats">
+                <button [disabled]="seat.seat_status!=='Available'" (click)="handleSelectSeat(seat)"
+                    [ngClass]="{'cursor-pointer':seat.seat_status==='Available','cursor-not-allowed':seat.seat_status !=='Available','hue-rotate-[110deg]':setSelectedSeats.has(seat)}"
+                    class="shadow-[2px_2px_10px_-4px] p-2 flex justify-center items-center flex-col hover:shadow-[2px_2px_15px_-2px_var(--primary-color)] duration-300 rounded-lg">
+                    <p>{{seat.seat_number}}</p>
+                    <img [ngClass]="{'filter hue-rotate-[260deg]':seat.seat_status==='Available'}"
+                        src="../../../assets/icons/seat.svg" alt="">
+                </button>
+            </li>
+        </ul>
+        <button
+            class="mb-2 w-full flex justify-center items-center gap-2 duration-300 border border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg"
+            (click)="confirmSeats()">Confirmar</button>
+    </main>
+</dialog>
+<dialog #contactDetail class="mx-auto w-max shadow-[2px_2px_15px_-5px] rounded-md py-2 px-5">
+    <button class="absolute top-2 right-2" (click)="closeModalContact()"><i class="pi pi-times text-xl"></i></button>
+    <header class=''>
+        <h1 class="mt-5 mb-4 text-2xl font-semibold">Selecciona los Asientos</h1>
+    </header>
+    <main class="flex flex-col gap-4 justify-center items-center">
+        <section class="flex justify-start items-center gap-2 text-sm">
+            <p>Asientos restantes: </p>
+            <p>{{totalPassengers}}</p>
+        </section>
+        <ul class="container_seats">
+            <li *ngFor="let seat of seats">
+                <button [disabled]="seat.seat_status!=='Available'" (click)="handleSelectSeat(seat)"
+                    [ngClass]="{'cursor-pointer':seat.seat_status==='Available','cursor-not-allowed':seat.seat_status !=='Available','hue-rotate-[110deg]':setSelectedSeats.has(seat)}"
+                    class="shadow-[2px_2px_10px_-4px] p-2 flex justify-center items-center flex-col hover:shadow-[2px_2px_15px_-2px_var(--primary-color)] duration-300 rounded-lg">
+                    <p>{{seat.seat_number}}</p>
+                    <img [ngClass]="{'filter hue-rotate-[260deg]':seat.seat_status==='Available'}"
+                        src="../../../assets/icons/seat.svg" alt="">
+                </button>
+            </li>
+        </ul>
+        <button
+            class="mb-2 w-full flex justify-center items-center gap-2 duration-300 border border-[var(--primary-color)] hover:bg-transparent bg-[var(--primary-color)] text-slate-200 hover:text-[var(--primary-color)] px-3 py-1 rounded-lg"
+            (click)="confirmContact()">Confirmar</button>
+    </main>
+</dialog> -->
 <app-footer></app-footer>

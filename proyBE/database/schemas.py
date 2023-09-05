@@ -3,11 +3,30 @@ from pydantic import BaseModel, UUID4
 import datetime
 
 
+class AirplaneSeatBase(BaseModel):
+    plane_id: str
+    seat_number: str
+    seat_type: str
+    seat_status: str
+
+
+class AirplaneSeatCreate(AirplaneSeatBase):
+    pass
+
+
+class AirplaneSeat(AirplaneSeatBase):
+    id: UUID4
+
+    class Config:
+        from_attributes = True
+
+
 class PlaneBase(BaseModel):
     model: str
     capacity: int
     serial_number: str
     code: str
+    airplaneSeats: List[AirplaneSeat] = []
 
 
 class PlaneCreate(PlaneBase):
@@ -112,33 +131,19 @@ class Luggage(LuggageBase):
         from_attributes = True
 
 
-class AirplaneSeatBase(BaseModel):
-    plane_id: str
-    seat_number: str
-    seat_type: str
-    seat_status: str
-
-
-class AirplaneSeatCreate(AirplaneSeatBase):
-    pass
-
-
-class AirplaneSeat(AirplaneSeatBase):
-    id: UUID4
-
-    class Config:
-        from_attributes = True
-
-
 class FlightBase(BaseModel):
     plane_id: UUID4
     pilot_id: UUID4
     airport_origin_id: UUID4
     airport_destination_id: UUID4
+    cost: float
+    costa: float
+    costb: float
     origin: str
     destination: str
     departure: datetime.datetime
     arrival: datetime.datetime
+    direct: bool
 
 
 class FlightCreate(FlightBase):

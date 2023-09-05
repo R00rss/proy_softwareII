@@ -1,0 +1,6 @@
+<app-navbar></app-navbar>
+<section class="min-h-[calc(100vh-116px)] overflow-hidden relative bg-neutral-100">
+    <app-filter-bar [absolute]="false" [filters]="filters"></app-filter-bar>
+    <app-table [filters]="filters" [listAndCountFlights]="listAndCountFlights"></app-table>
+</section>
+<app-footer></app-footer>

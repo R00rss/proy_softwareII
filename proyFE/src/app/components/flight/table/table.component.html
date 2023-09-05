@@ -1,0 +1,214 @@
+<main [ngClass]="{'mt-40 mb-5 w-[min(90%,1200px)]':!roundTrip,'mt-4 w-full mb-4':roundTrip===true}"
+    *ngIf="listAndCountFlights&&listAndCountFlights.count>0"
+    class="py-9 px-10 text-sm shadow-[0px_0px_14px_-6px] bg-slate-50 rounded-md mx-auto">
+    <section class="flex justify-start items-center gap-2 p-2">
+        <img class="w-8 h-8" src="../../../../assets/icons/plane_off.png" alt="">
+        <p *ngIf="filters!==null&&filters!==undefined" class="text-xl font-semibold">
+            Salida de {{filters.origin}} a {{filters.destination}} —
+            {{filters.dateFrom?formatDateToString(filters.dateFrom):''}}
+            {{filters.dateTo?'a':''}}
+            {{ filters.dateTo?formatDateToString(filters.dateTo):'' }}
+        </p>
+    </section>
+    <ul class="flex flex-col gap-3">
+        <section
+            class="flex flex-row gap-2 items-center justify-start bg-neutral-200 shadow-[0px_0px_3px_-2px] rounded-sm px-2 py-4">
+            <div class="flex flex-row justify-center items-center gap-2">
+                <i class="pi pi-filter-fill"></i>
+                <p>Recomendado:</p>
+            </div>
+            <div class="flex flex-row justify-start items-center gap-3">
+                <button (click)="handleFilter('direct')"
+                    [ngClass]="{'bg-[var(--primary-color)] text-slate-50':selectedFilter ==='direct','bg-slate-50 text-slate-600':selectedFilter!=='direct'}"
+                    class="px-3 py-1 text-sm rounded-3xl bg-slate-50 border border-slate-600">Vuelos
+                    directos</button>
+                <button (click)="handleFilter('cheapest')"
+                    [ngClass]="{'bg-[var(--primary-color)] text-slate-50':selectedFilter==='cheapest','bg-slate-50 text-slate-600':selectedFilter!=='cheapest'}"
+                    class="px-3 py-1 text-sm rounded-3xl bg-slate-50 border border-slate-600">Mejor
+                    precio</button>
+                <button (click)="handleFilter('all')"
+                    [ngClass]="{'bg-[var(--primary-color)] text-slate-50':selectedFilter==='all','bg-slate-50 text-slate-600':selectedFilter!=='all'}"
+                    class="px-3 py-1 text-sm rounded-3xl bg-slate-50 border border-slate-600">Todos</button>
+            </div>
+        </section>
+        <li *ngFor="let flight of listAndCountFlights.data; let index = index">
+            <div (click)="handleClicFlight(flight)"
+                class="cursor-pointer hover:scale-[1.01] hover:shadow-[0px_0px_20px_0px_var(--primary-color)] duration-300 shadow-[0px_0px_10px_-6px] flex gap-2 w-full h-28 items-center py-4"
+                id="{{getValidSelectorByUUID(flight.id)}}">
+                <!-- <p style="text-align: center;" class="w-[5%]">{{ index + 1 }}</p> -->
+                <section class="w-[75%] flex justify-between items-center px-10">
+                    <div class="flex flex-col justify-center items-center gap-1">
+                        <p class="text-xl font-bold">{{ flight.departure |date:'HH:mm ' }}</p>
+                        <p class="text-lg font-extralight">{{ flight.origin }}</p>
+                    </div>
+                    <div class="w-full flex flex-col gap-2 justify-center items-center">
+                        <section class="w-full flex justify-center items-center text-slate-600 text-xs gap-5">
+                            <div class="flex justify-center items-center gap-2">
+                                <p>{{ flight.direct===true?'Directo':'Escalado' }}</p>
+                                -
+                                <p>{{getDuration(flight.departure,flight.arrival)}}</p>
+                            </div>
+                            <div class="w-[1px] h-3 bg-slate-600"></div>
+                            <div class="group flex justify-center items-center gap-1">
+                                <i class="pi pi-info-circle"></i>
+                                <button class="group-hover:text-[var(--primary-color)] duration-300">Detalle de
+                                    vuelo</button>
+                            </div>
+                        </section>
+                        <section class="w-full py-2 px-3 flex justify-center items-center">
+                            <div class="w-full h-[1px] bg-slate-400"></div>
+                            <img class="w-5 h-5 object-contain invert-[0.6] mx-4"
+                                src="../../../../assets/icons/plane_off.png" alt="">
+                            <div class="w-full h-[1px] bg-slate-400"></div>
+                        </section>
+                        <p class="text-slate-600 text-xs">Incluye trayecto operado por Horizon Jet</p>
+                    </div>
+                    <div class="flex flex-col justify-center items-center gap-1">
+                        <p class="text-xl font-bold">{{ flight.arrival |date:'HH:mm' }}</p>
+                        <p class="text-lg font-extralight">{{ flight.destination }}</p>
+                    </div>
+                </section>
+                <div class="w-[1px] h-full bg-slate-200"></div>
+                <div class="font-semibold text-2xl px-10 w-[25%] flex flex-col justify-center items-center">
+                    <p class="text-center">${{ flight.cost }}</p>
+                    <p class="text-xs font-extralight text-center">Precio por persona</p>
+                </div>
+            </div>
+            <section class="flex justify-center items-center gap-2 my-4"
+                [ngClass]="{'hidden':!setOpened.has(flight.id)}">
+                <div (click)="flightSelect(flight,'costa')"
+                    class="cursor-pointer hover:scale-[1.02] duration-300 bg-[var(--primary-color)] px-0.5 py-2 rounded-lg w-[330px]">
+                    <div class=" bg-slate-50 pt-3 flex flex-col justify-center items-center gap-2">
+                        <section class="my-3">
+                            <h2 class="text-center text-4xl font-semibold text-[var(--primary-color)]">A</h2>
+                            <p class="text-md text-center font-light text-[var(--primary-color)]">Más Confort
+                            </p>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/lm.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Acumula LifeMiles</h3>
+                                <p class="text-xs font-extralight">Hasta 15 LifeMiles por cada USD</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/bag.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">1 equipaje de bodega grande (53 kg)</h3>
+                                <p class="text-xs font-extralight">Entrega el equipaje en el counter</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/ticket.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Check-in gratis en aeropuerto</h3>
+                                <p class="text-xs font-extralight">Hasta 60 minutos antes del vuelo</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/seat.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Asiento Plus</h3>
+                                <p class="text-xs font-extralight">Sujeto a disponibilidad</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/premio.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Abordaje prioritario</h3>
+                                <p class="text-xs font-extralight">Sé de los primeros en subir al avión</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/money.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Reembolso</h3>
+                                <p class="text-xs font-extralight">Permitido sobre la tarifa y antes de la salida
+                                </p>
+                            </div>
+                        </section>
+                        <section class="bg-[var(--primary-color)] text-slate-50 w-full text-center">
+                            <h3 class="text-xl font-semibold">${{flight.costa}}</h3>
+                            <p class="text-sm">Precio por pasajero</p>
+                        </section>
+                    </div>
+                </div>
+                <div (click)="flightSelect(flight,'costb')"
+                    class="cursor-pointer hover:scale-[1.02] duration-300 bg-[var(--primary-color)] px-0.5 py-2 rounded-lg w-[330px]">
+                    <div class=" bg-slate-50 pt-3 flex flex-col justify-center items-center gap-2">
+                        <section class="my-3">
+                            <h2 class="text-center text-4xl font-semibold text-[var(--primary-color)]">B</h2>
+                            <p class="text-md text-center font-light text-[var(--primary-color)]">Más flexibilidad
+                            </p>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/lm.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Acumula LifeMiles</h3>
+                                <p class="text-xs font-extralight">Hasta 7 LifeMiles por cada USD</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/bag.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">1 equipaje de bodega (23 kg)</h3>
+                                <p class="text-xs font-extralight">Entrega el equipaje en el counter</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/ticket.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Check-in gratis en aeropuerto</h3>
+                                <p class="text-xs font-extralight">Hasta 60 minutos antes del vuelo</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/seat.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Asiento Plus</h3>
+                                <p class="text-xs font-extralight">Sujeto a disponibilidad</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/premio.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Abordaje prioritario</h3>
+                                <p class="text-xs font-extralight">Sé de los primeros en subir al avión</p>
+                            </div>
+                        </section>
+                        <section class="w-[290px] mx-auto flex gap-1 items-start">
+                            <img class="w-[24px] h-[24px] object-contain hue-rotate-[105deg] invert filter"
+                                src="../../../../assets/icons/money.svg" alt="">
+                            <div>
+                                <h3 class="text-xs font-semibold">Reembolso</h3>
+                                <p class="text-xs font-extralight">Permitido sobre la tarifa y antes de la salida
+                                </p>
+                            </div>
+                        </section>
+                        <section class="bg-[var(--primary-color)] text-slate-50 w-full text-center">
+                            <h3 class="text-xl font-semibold">${{flight.costb}}</h3>
+                            <p class="text-sm">Precio por pasajero</p>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </li>
+        <button class="hover:bg-neutral-200 duration-300 mx-auto px-6 py-4 border-2 border-slate-950 rounded-sm">Mostrar
+            mas vuelos</button>
+
+    </ul>
+</main>
+<section *ngIf="!listAndCountFlights || listAndCountFlights.count<=0" class="flex flex-col justify-center items-center">
+    <p>No se encontraron vuelos</p>
+</section>

@@ -32,6 +32,10 @@ export const EXAMPLE_FLIGHTS:Flight[] = [{
     "departure": "2023-08-15T23:57:44.489575",
     "arrival": "2023-08-16T07:57:44.489575",
     "id": "505036c7-f186-45b7-a024-973df6006b15",
+    cost: 200,
+    costa: 100,
+    costb: 100,
+    "direct": true,
     "pilot": {
         "name": "Ronny",
         "lastname": "Garcia",
