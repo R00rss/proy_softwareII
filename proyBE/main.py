@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Query
+from fastapi import FastAPI, HTTPException, Depends, Body, Query
 
 from os import path
 import uvicorn
@@ -10,6 +10,13 @@ from sqlalchemy import func, case
 from typing import List
 from datetime import datetime
 import schemas as schemasResponse
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+import ssl
+from PIL import Image
+import io
 
 origins = [
     # all origins
@@ -27,6 +34,16 @@ app.add_middleware(
 )
 
 pathname = path.dirname(path.realpath(__file__))
+
+API_KEY = "mysecretkeyemail"
+
+
+async def validate_token_query(api_key: str = Query()):
+    if api_key == "":
+        raise HTTPException(status_code=401, detail="No API key provided")
+
+    if api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
 
 
 def get_db():
@@ -302,6 +319,78 @@ def get_destinations(db: Session = Depends(get_db), skip: int = 0, limit: int = 
     db_airports = db.query(models.Airport).offset(skip).limit(limit).all()
     return db_airports
 
+@app.post("/api/send-email")
+async def send_email(
+    recipients: list = Body(...),
+    body: dict = Body(embed=True),
+    subject: str = Body(embed=True),
+    api_key: None = Depends(validate_token_query),
+):
+    try:
+        # create message object instance
+        msg = MIMEMultipart()
+        msg["From"] = "HORIZON JET "
+        msg["To"] = ", ".join(recipients)
+        msg["Subject"] = subject
 
+        # Logo de la empresa (ajusta la ruta a tu archivo de imagen)
+        with open("logo_white.png", "rb") as image_file:
+            img = Image.open(image_file)
+            img = img.resize((120, 100))  # Redimensionar la imagen
+            buffer = io.BytesIO()
+            img.save(buffer, format="PNG")
+            image_data = buffer.getvalue()
+
+        image = MIMEImage(image_data, name="logo_white.png")
+        msg.attach(image)
+
+        # Contenido del mensaje
+        message = f"""
+        <html>
+        <body>
+        <table style="background-color: #770085; width: 100%;">
+            <tr>
+                <td>
+                    <img src="cid:logo_white.png">
+                </td>
+                <td style="color: #fff; margin: 0">
+                    <h1>{subject}</h1>
+                </td>
+            </tr>
+        </table>
+        <p style="font-family: 'Times New Roman'; font-size:20px;">Gracias por confiar en nosotros</p>
+        <p style="font-family: 'Times New Roman'; font-size:16px;">A continuación, detallamos un resumen de su compra:</p>
+        <div style="font-family: 'Times New Roman';">
+        """
+        for key, value in body.items():
+            message += f'<p style = "margin: 1px 0px 0px 30px; font-size:12px;"><strong>{key}:</strong> {value}</p><br>'
+        message +="""
+        </div>
+        </body>
+        </html>
+        """
+
+        # Agregar el mensaje al cuerpo del correo
+        msg.attach(MIMEText(message, "html"))
+
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
+        sender = "lizbethoa0612@gmail.com"
+        password = "ermpvgxfyxpxltwf"
+
+        context = ssl.create_default_context()
+
+        s = smtplib.SMTP(smtp_server, smtp_port)
+        s.starttls(context=context)
+
+        s.ehlo()
+        s.login(sender, password)
+
+        s.sendmail(sender, recipients, msg.as_string())
+        s.close()
+        return {"message": "Email sent successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
