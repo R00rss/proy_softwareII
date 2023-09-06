@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+<section class="min-h-[calc(100vh-116px)]">
+    <section class="shadow-[2px_2px_13px_-4px] w-[min(800px,90%)] mx-auto py-6 px-3 rounded">
+        <h1 class="py-3 text-2xl font-semibold">
+            Equipaje Adicional
+        </h1>
+        <section class="border border-[#007CA6] flex gap-2 justify-center items-center px-2">
+            <i class="pi pi-info-circle text-2xl font-semibold text-[#007CA6]"></i>
+            <p class=" text-[#007CA6] px-5 py-3 font-semibold">
+                Recuerda que esta tarifa ya tiene 1 equipaje de bodega de 23kg incluido para tu vuelo. Si necesitas mas
+                equipaje, comprarlo ahora y ahorra.
+            </p>
+        </section>
+    </section>
+    <section class="flex justify-center items-center gap-5 w-[min(800px,90%)] mx-auto">
+        <ul class="py-5">
+            <li *ngFor="let passenger of passengers" class="flex flex-col justify-center items-center gap-2">
+                <button [ngClass]="{'border-[#007CA6]':passengerSelected.passport === passenger.passport}"
+                    class="border-2 py-4 px-3 w-[300px] flex justify-center items-center gap-10"
+                    (click)="handleChangePassenger(passenger)">
+                    <p class="font-semibold text-lg">
+                        {{ passenger.name }}
+                    </p>
+                    <p class="font-medium text-sm text-end">
+                        ${{ passenger.numBaggage * passenger.priceBaggage}} USD
+                    </p>
+                </button>
+            </li>
+        </ul>
+        <section class="bg-slate-500 h-full w-full py-7 px-4">
+            <section>
+                <img src="../../../../assets/images/maleta.jpeg" class="w-28 h-28 object-contain" alt="maleta">
+                <p>Equipaje de bodega de 23kg (50lbs) </p>
+            </section>
+            <section class="flex flex-col w-[200px]">
+                <p-inputNumber [style]="{width: '100%'}" (ngModelChange)="handleChangeBaggage($event)" [min]="0"
+                    [max]="5" [(ngModel)]="passengerSelected.numBaggage" [showButtons]="true" buttonLayout="horizontal"
+                    inputId="horizontal" spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-danger"
+                    incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                    decrementButtonIcon="pi pi-minus">
+                </p-inputNumber>
+                <section class="flex flex-col justify-between items-center">
+                    <p class="font-medium text-sm">
+                        Total
+                    </p>
+                    <p class="font-semibold text-lg">
+                        ${{ passengerSelected.numBaggage * passengerSelected.priceBaggage}} USD
+                    </p>
+                </section>
+            </section>
+
+        </section>
+    </section>
+    <app-footer></app-footer>

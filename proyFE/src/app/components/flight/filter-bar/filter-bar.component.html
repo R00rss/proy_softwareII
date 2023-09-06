@@ -33,24 +33,21 @@
                 <section class="flex flex-col gap-3 text-[#75135d] text-xs w-[310px] shadow-[0px_0px_3px_-1px] p-2">
                     <h2 class="text-xl font-medium">¿Cuándo viajas?</h2>
                     <section class="flex flex-row gap-2">
-                        <p-calendar
-                            placeholder="{{selectedTrip?.code===OPTIONS_TRIP.ROUND_TRIP?'Salida':'Fecha de salida'}}"
+                        <p-calendar placeholder="{{isRoundTrip(selectedTrip)?'Salida':'Fecha de salida'}}"
                             [style]="{'width':'100%'}" [(ngModel)]="selectedFromDate" dateFormat="dd/mm/yy"
                             [showIcon]="true"></p-calendar>
-                        <p-calendar *ngIf="selectedTrip?.code===OPTIONS_TRIP.ROUND_TRIP" placeholder="Vuelta"
-                            [style]="{'width':'100%'}" [(ngModel)]="selectedToDate" dateFormat="dd/mm/yy"
-                            [showIcon]="true"></p-calendar>
+                        <p-calendar *ngIf="isRoundTrip(selectedTrip)" placeholder="Vuelta" [style]="{'width':'100%'}"
+                            [(ngModel)]="selectedToDate" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
                     </section>
                 </section>
                 <section
                     class="flex flex-col gap-3 text-[#75135d] w-[370px] shadow-[0px_0px_3px_-1px] rounded-lg rounded-l-none p-2">
                     <h2 class="text-xl font-medium">¿Con quien viajas?</h2>
-                    <div
-                        class="w-full border rounded-md h-[36px] flex justify-center text-sm items-center py-1 px-0.5">
-                        <button type="button" (click)="openModalPassengers()"
-                            class="text-[#495057] w-full">
+                    <div class="w-full border rounded-md h-[36px] flex justify-center text-sm items-center py-1 px-0.5">
+                        <button type="button" (click)="openModalPassengers()" class="text-[#495057] w-full">
                             Adultos Mayores: {{passengers.old}},
-                            Adultos: {{passengers.adults}}, Niños: {{passengers.children}}, Bebés: {{passengers.infants}}</button>
+                            Adultos: {{passengers.adults}}, Niños: {{passengers.children}}, Bebés:
+                            {{passengers.infants}}</button>
                     </div>
                 </section>
                 <section class="flex flex-col justify-end gap-1 text-base font-medium">
@@ -64,6 +61,7 @@
         </div>
     </section>
 </section>
+
 <dialog #modalPassengers class="mx-auto w-max shadow-[2px_2px_15px_-5px] rounded-md py-2 px-5">
     <button class="absolute top-2 right-2" (click)="closeModalPassengers()"><i class="pi pi-times text-xl"></i></button>
     <header class=''>

@@ -49,19 +49,13 @@ export class FlightDetailComponent {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      console.log({ params })
-      // check if selectedCostKey is a valid value
       if (Object.values(ESelectedCostKey).includes(params['selectedCostKey'])) {
         this.selectedCostKey = params['selectedCostKey'];
-        if (this.flight === undefined || this.flight === null) return;
         this.tarifa = this.getTarifa(this.selectedCostKey);
-        console.log(this.flight[this.selectedCostKey])
       }
     });
     
     this.flight = this.flightStateService.getSelectedFlight();
-    console.log({ flight: this.flight })
-
 
     if (this.flight === undefined) {
       this.flightStateService.reset();
@@ -73,7 +67,6 @@ export class FlightDetailComponent {
     //   this.router.navigate(['/home'])
 
     this.filters = this.filterStateService.getFiltersSelected();
-    console.log({ filters: this.filters })
     if (this.filters === undefined) {
       this.filterStateService.reset();
       if (window.history.length > 1) {

@@ -1,34 +1,34 @@
 <app-navbar></app-navbar>
 
 <section class="min-h-[calc(100vh-116px)] relative">
-    <div class="w-[min(90%,600px)] shadow-[2px_2px_13px_-3px] rounded-xl  mx-auto mt-4">
+    <div class="w-[min(90%,600px)] shadow-[2px_2px_13px_-3px] rounded-xl mx-auto mt-[30px]">
         <h1 class="px-2 py-4 font-light text-2xl">Seleccione los asientos</h1>
-
         <p class="px-2 font-extralight">Asientos sin seleccionar: {{seatsNumber}}</p>
-        <section class="flex flex-col gap-2">
-            <p>Leyenda</p>
-            <ul>
-                <li *ngFor="let color of colors">
-                    <div class="flex justify-center items-center gap-2">
+        <section class="flex justify-center items-center gap-2">
+            <section class="w-9/12">
+                <section class="w-[290px] mx-auto py-7 flex flex-wrap gap-2 justify-center items-center p-2"
+                    *ngIf="seats.length>0">
+                    <div *ngFor="let seat of seats">
+                        <button (click)="selectSeat(seat)"
+                            class="w-11 h-11 cursor-pointer duration-300 hover:scale-105 flex justify-center items-center rounded-lg"
+                            [style]="{'border':'2px solid '+getColorByStatus(seat.seat_status)}">
+                            <p>{{seat.seat_number}}</p>
+                            <!-- <p>{{seat.seat_status}}</p> -->
+                        </button>
+                    </div>
+
+                </section>
+            </section>
+            <ul class="pr-10">
+                <li class="" *ngFor="let color of colors">
+                    <div class="flex justify-start items-center gap-2">
                         <div class="w-4 h-4 rounded-full" [style]="{'background-color':color.color}"></div>
-                        <!-- <p>{{color.status | SeatTypePipe}}</p> -->
+                        <p>{{color.status}}</p>
                     </div>
                 </li>
             </ul>
         </section>
 
-
-        <section class="w-[290px] mx-auto py-7 flex flex-wrap gap-2 justify-center items-center p-2"
-            *ngIf="seats.length>0">
-            <div *ngFor="let seat of seats">
-                <button (click)="selectSeat(seat)"
-                    class="w-11 h-11 cursor-pointer duration-300 hover:scale-105 flex justify-center items-center rounded-lg"
-                    [style]="{'border':'2px solid '+getColorByStatus(seat.seat_status)}">
-                    <p>{{seat.seat_number}}</p>
-                    <!-- <p>{{seat.seat_status}}</p> -->
-                </button>
-            </div>
-        </section>
         <section
             class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
             <button (click)="goToPayment()" [disabled]="seatsNumber>0"

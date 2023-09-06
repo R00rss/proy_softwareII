@@ -37,14 +37,14 @@ export class TableComponent implements OnInit {
 
   ngOnInit() {
     console.log("ngOnInit de table component")
-    console.log({ filters: this.filters })
+    console.log(this.filters)
     if (this.filters === undefined) {
       if (this.roundTrip === true) {
         this.filters = this.filterStateService.getFiltersReturnSelected()
       } else {
         this.filters = this.filterStateService.getFiltersSelected();
       }
-      console.log({ filters: this.filters })
+      console.log(this.filters)
       if (this.filters) this.getFlights(this.filters);
     } else {
       this.getFlights(this.filters);
@@ -88,7 +88,7 @@ export class TableComponent implements OnInit {
   }
   getValidSelectorByUUID(uuid: string): string {
     const modifiedId = uuid.replace(/-/g, '');
-    console.log({ modifiedId })
+    // console.log({ modifiedId })
     return `CODE${modifiedId}`;
   }
   getDuration(departure: string, arrival: string): string {

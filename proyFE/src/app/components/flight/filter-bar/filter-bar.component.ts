@@ -48,6 +48,7 @@ export class FilterBarComponent implements OnInit {
           console.log({ destinations, tripOptions })
           this.destinationOptions = destinations;
           this.tripOptions = tripOptions;
+          console.log({ filters: this.filters })
           if (this.filters) this.setFilters(this.filters)
         },
         error: (err) => console.error({ err })
@@ -55,9 +56,28 @@ export class FilterBarComponent implements OnInit {
     )
 
   }
+  isRoundTrip(selectedTrip: comboItem | undefined) {
+    if (selectedTrip === undefined || selectedTrip === null) return false;
+    return selectedTrip.code === OPTIONS_TRIP.ROUND_TRIP;
+  }
+
+  getCurrentTrip() {
+    console.log({ selectedTrip: this.selectedTrip })
+    this.selectedTrip = this.tripOptions.find((trip) => trip.code == OPTIONS_TRIP.ROUND_TRIP);
+  }
 
   setFilters(filters: Filters) {
-    this.selectedTrip = this.tripOptions.find((trip) => trip.code === filters.trip);
+    console.log({ filters })
+    const selectedTrip = this.tripOptions.find((trip) => trip.code == filters.trip);
+    if (selectedTrip) {
+      const aux = {
+        code: filters.trip,
+        name: selectedTrip.name
+      }
+      console.log({ aux })
+      this.selectedTrip = { ...aux };
+      console.log(this.selectedTrip)
+    }
     this.selectedOrigin = this.destinationOptions.find((destination) => destination.code === filters.origin);
     this.selectedDestination = this.destinationOptions.find((destination) => destination.code === filters.destination);
     this.selectedFromDate = new Date(filters.dateFrom);
@@ -68,6 +88,7 @@ export class FilterBarComponent implements OnInit {
       children: filters.children,
       infants: filters.infants
     }
+    console.log({ selectedTrip: this.selectedTrip, selectedOrigin: this.selectedOrigin, selectedDestination: this.selectedDestination, selectedFromDate: this.selectedFromDate, selectedToDate: this.selectedToDate, passengers: this.passengers })
   }
 
   OPTIONS_TRIP = OPTIONS_TRIP;

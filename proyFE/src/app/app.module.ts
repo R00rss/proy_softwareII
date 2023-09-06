@@ -34,7 +34,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SeatsDetailComponent } from './pages/seats-detail/seats-detail/seats-detail.component';
 import { PaymentComponent } from './pages/payment/payment/payment.component';
 import { NgxPayPalModule } from 'ngx-paypal';
-// import { SeatTypePipe } from './pipes/seat-type.pipe';
+import { SeatTypePipe } from './pipes/seat-type.pipe';
+import { BaggageComponent } from './pages/baggage/baggage/baggage.component';
 // Registra los datos de localización en español
 registerLocaleData(localeEs);
 
@@ -56,9 +57,10 @@ registerLocaleData(localeEs);
     ClientsDetailComponent,
     TableComponent,
     PassengerTypePipe,
-    // SeatTypePipe,
+    SeatTypePipe,
     SeatsDetailComponent,
-    PaymentComponent
+    PaymentComponent,
+    BaggageComponent
   ],
   imports: [
     BrowserModule,

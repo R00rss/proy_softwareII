@@ -6,7 +6,6 @@ import { MessagesService } from 'src/app/services/gui/messages/messages.service'
 import { PlaneSeatsService, Seat } from 'src/app/services/seats/plane-seats.service';
 import { FlightStateService } from 'src/app/services/states/flight/flight-state.service';
 import { PassengersService } from 'src/app/services/states/passengers/passengers.service';
-
 interface SeatEditable extends Seat {
   new_seat_status?: string;
 }
