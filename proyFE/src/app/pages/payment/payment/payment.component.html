@@ -3,8 +3,9 @@
     <section class=" mx-auto w-[800px] my-4 p-2 shadow-[2px_2px_12px_-4px] flex flex-col justify-center items-center rounded-lg">
         <h1 class="w-full text-start py-3 font-light text-xl">Elige tu método de pago</h1>
         <section class="w-[300px] bg-slate-50">
-            <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+            <ngx-paypal *ngIf="showPaypalButtons" [config]="payPalConfig"></ngx-paypal>
         </section>
+        <!--<button *ngIf="showPaypalButtons" (click)="back()">Volver atras</button>-->
     </section>
 </section>
 <app-footer></app-footer>
