@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ICreateOrderRequest, IPayPalConfig } from 'ngx-paypal';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { MailService } from 'src/app/services/mail/mail.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
@@ -13,10 +13,11 @@ export class PaymentComponent implements OnInit {
   public payPalConfig?: IPayPalConfig;
 
   public showPaypalButtons: boolean = true;
+  nombreCliente: String = "Mariuxi";
 
   constructor(
-    private modalService: NgbModal,
-    private emailService: MailService
+    private emailService: MailService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -98,10 +99,11 @@ export class PaymentComponent implements OnInit {
       onClientAuthorization: (data) => {
         console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', 
         JSON.stringify(data));
-        this.openModal(
+        /*this.openModal(
           data.purchase_units[0].items,
           data.purchase_units[0].amount.value
-        );
+        );*/
+        this.popUp();
         this.sendEmail();
       },
       onCancel: (data, actions) => {
@@ -116,11 +118,11 @@ export class PaymentComponent implements OnInit {
     }
   }
 
-  openModal(items: any, amount: any): void {
+  /*openModal(items: any, amount: any): void {
     const modalRef = this.modalService.open(ModalComponent);
     modalRef.componentInstance.items = items;
     modalRef.componentInstance.amount = amount;
-  }
+  }*/
 
   pay() {
     this.showPaypalButtons = true;
@@ -130,6 +132,19 @@ export class PaymentComponent implements OnInit {
     this.showPaypalButtons = false;
   }
 
+  popUp() {
+    Swal.fire({
+      icon: 'success',
+      title: `${this.nombreCliente}, Su compra fue realizada exitosamente`,
+      text: 'En unos momentos recibirá un correo de confirmación con los detalles de su compra.',
+      timer: 3000,
+      showConfirmButton: false,
+    }).then(() => {
+      
+      this.router.navigate(['/home']);
+      
+    });
+  }
   sendEmail() {
     const apiKey = 'mysecretkeyemail';
     const emailData = {
