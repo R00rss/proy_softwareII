@@ -1,0 +1,45 @@
+<nav class="sticky top-0 w-full z-10 bg_gradient_purple">
+    <ul class="flex justify-between items-center px-4 py-3  w_standard mx-auto">
+        <li class="flex justify-center items-center gap-4">
+            <section class="flex justify-center items-center group">
+                <a href="/" class="">
+                    <img class="duration-300 group-hover:drop-shadow-[1px_1px_10px_#ffffff] w-16 cursor-pointer object-contain"
+                        src="../../../assets/images/logo_white.png" alt="">
+                </a>
+                <section class="text-slate-100">
+                    <h1>Horizon Jet</h1>
+                    <p class="text-sm secondary_font">Volando hacia nuevos horizontes</p>
+                </section>
+            </section>
+        </li>
+        <li class="flex justify-center items-center gap-2">
+            <section>
+                <ul class="flex justify-center items-center text-slate-100 font-medium text-sm gap-4 px-8">
+                    <li class="duration-300 hover:shadow-[0px_0px_10px_-2px] p-2 rounded-lg cursor-pointer">
+                        <app-logout></app-logout>
+                    </li>
+                </ul>
+            </section>
+        </li>
+    </ul>
+</nav>
+
+<main>
+    <nav>
+      <ul>
+        <li (click)="changeOption('create')">Registrar vuelos</li>
+        <li (click)="changeOption('acerca-de')">Acerca de</li>
+        <li (click)="changeOption('contacto')">Contacto</li>
+      </ul>
+    </nav>
+    <div *ngIf="selectedOption === 'create'">
+      <app-flight-create></app-flight-create>
+    </div>
+    <div *ngIf="selectedOption === 'registro'">
+      <app-edit-flight></app-edit-flight>
+    </div>
+    <div *ngIf="selectedOption === 'contacto'">
+      <app-flight-detail></app-flight-detail>
+    </div>
+  </main>
+  

@@ -1,0 +1,28 @@
+/* styles.css */
+
+/* Estilos para el menú */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex; /* Coloca los elementos en línea horizontal */
+  }
+  
+  nav li {
+    margin-right: 20px; /* Espacio entre elementos del menú */
+    cursor: pointer;
+    font-weight: bold;
+    color: #333; /* Color del texto */
+    transition: color 0.3s; /* Transición de color al pasar el mouse */
+  }
+  
+  nav li:hover {
+    color: #007bff; /* Color al pasar el mouse */
+  }
+  
+  /* Estilos para las secciones */
+  main {
+    text-align: center; /* Centra el contenido en las secciones */
+  }
+  
+  /* Puedes agregar estilos adicionales para cada sección aquí */
+  

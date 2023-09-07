@@ -46,6 +46,9 @@ import { SearchFlightComponent } from './pages/admin/search-flight/search-flight
 import { EditFlightComponent } from './pages/admin/edit-flight/edit-flight.component';
 import { PerfilComponent } from './pages/admin/perfil/perfil.component';
 import { MenubarModule } from 'primeng/menubar';
+import { ModalComponent } from './components/modal/modal.component';
+import { SeatTypePipe } from './pipes/seat-type.pipe';
+import { BaggageComponent } from './pages/baggage/baggage/baggage.component';
 // import { SeatTypePipe } from './pipes/seat-type.pipe';
 // Registra los datos de localización en español
 registerLocaleData(localeEs);
@@ -79,7 +82,10 @@ registerLocaleData(localeEs);
     FlightCreateComponent,
     SearchFlightComponent,
     EditFlightComponent,
-    PerfilComponent
+    PerfilComponent,
+    ModalComponent,
+    BaggageComponent,
+    SeatTypePipe,
   ],
   imports: [
     BrowserModule,
