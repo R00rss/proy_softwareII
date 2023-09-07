@@ -100,8 +100,8 @@ uploads/
 
 #DOCKER
 
-/initial_scripts
-initial_scripts
+# /initial_scripts
+# initial_scripts
 
 /pgadmin_data
 pgadmin_data
