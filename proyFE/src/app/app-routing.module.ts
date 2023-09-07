@@ -7,6 +7,11 @@ import { SearchDetailComponent } from './pages/search-detail/search-detail/searc
 import { ClientsDetailComponent } from './pages/clients_detail/clients-detail/clients-detail.component';
 import { SeatsDetailComponent } from './pages/seats-detail/seats-detail/seats-detail.component';
 import { PaymentComponent } from './pages/payment/payment/payment.component';
+import { FlightsListComponent } from './pages/admin/flights-list/flights-list.component';
+import { PerfilComponent } from './pages/admin/perfil/perfil.component';
+import { AuthGuard } from '@auth0/auth0-angular';
+import { FlightCreateComponent } from './pages/admin/flight-create/flight-create.component';
+import { EditFlightComponent } from './pages/admin/edit-flight/edit-flight.component';
 import { BaggageComponent } from './pages/baggage/baggage/baggage.component';
 
 const routes: Routes = [
@@ -19,7 +24,13 @@ const routes: Routes = [
   { path: 'clients_detail', component: ClientsDetailComponent },
   { path: 'seats_detail', component: SeatsDetailComponent },
   { path: 'payment', component: PaymentComponent },
-  { path: 'baggage', component: BaggageComponent },
+  { path: 'administration', component: FlightsListComponent, canActivate: [AuthGuard]},
+  { path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard]},
+  { path: 'flightCreate', component: FlightCreateComponent, canActivate: [AuthGuard]},
+  { path: 'flightEdit', component: EditFlightComponent, canActivate: [AuthGuard]},
+  { path: 'flightSearch', component: SearchDetailComponent, canActivate: [AuthGuard]},
+
+  // { path: 'flightDetail', component: FlightDetailComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

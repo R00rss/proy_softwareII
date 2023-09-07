@@ -1,3 +1,8 @@
-<router-outlet></router-outlet>
-<app-block-gui></app-block-gui>
-<app-message></app-message>
+<!--<div *ngIf="auth.isLoading$ | async; else loaded">
+    <app-block-gui></app-block-gui>
+</div>
+<ng-template #loaded>-->
+    <router-outlet></router-outlet>
+    <app-block-gui></app-block-gui>
+    <app-message></app-message>
+<!--</ng-template>-->

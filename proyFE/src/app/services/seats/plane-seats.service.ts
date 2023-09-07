@@ -14,7 +14,7 @@ export interface Seat {
   providedIn: 'root'
 })
 export class PlaneSeatsService {
-  seatUrl: string = "http://localhost:8000/plane_seat"
+  seatUrl: string = "https://proyect-software-ii-vercel-c2bwfssqs-r00rss.vercel.app/plane_seat"
   constructor(public http: HttpClient) { }
 
   getSeatsByPlaneId(plane_id: string): Observable<Seat[]> {

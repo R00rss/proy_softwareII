@@ -19,8 +19,8 @@ export interface comboItem {
 })
 export class AirportsService {
 
-  baseUrl: string = "http://localhost:8000"
-
+  //baseUrl: string = "http://localhost:8000"
+  baseUrl: string = "https://proyect-software-ii-vercel-c2bwfssqs-r00rss.vercel.app"
   constructor(public http: HttpClient) { }
 
   mapperDestinationsToCombo(destinations: Destinations[]): comboItem[] {

@@ -34,9 +34,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SeatsDetailComponent } from './pages/seats-detail/seats-detail/seats-detail.component';
 import { PaymentComponent } from './pages/payment/payment/payment.component';
 import { NgxPayPalModule } from 'ngx-paypal';
-import { ModalComponent } from './components/modal/modal.component';
-import { SeatTypePipe } from './pipes/seat-type.pipe';
-import { BaggageComponent } from './pages/baggage/baggage/baggage.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthModule } from '@auth0/auth0-angular';
+import { environment } from '../environments/environment';
+import { LogoutComponent } from './components/logout/logout.component';
+import { AuthenticationButtonComponent } from './components/authentication-button/authentication-button.component';
+import { AccessNavbarComponent } from './components/access-navbar/access-navbar.component';
+import { FlightsListComponent } from './pages/admin/flights-list/flights-list.component';
+import { FlightCreateComponent } from './pages/admin/flight-create/flight-create.component';
+import { SearchFlightComponent } from './pages/admin/search-flight/search-flight.component';
+import { EditFlightComponent } from './pages/admin/edit-flight/edit-flight.component';
+import { PerfilComponent } from './pages/admin/perfil/perfil.component';
+import { MenubarModule } from 'primeng/menubar';
+// import { SeatTypePipe } from './pipes/seat-type.pipe';
 // Registra los datos de localización en español
 registerLocaleData(localeEs);
 
@@ -61,8 +71,15 @@ registerLocaleData(localeEs);
     SeatTypePipe,
     SeatsDetailComponent,
     PaymentComponent,
-    ModalComponent,
-    BaggageComponent
+    LoginComponent,
+    LogoutComponent,
+    AuthenticationButtonComponent,
+    AccessNavbarComponent,
+    FlightsListComponent,
+    FlightCreateComponent,
+    SearchFlightComponent,
+    EditFlightComponent,
+    PerfilComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +97,15 @@ registerLocaleData(localeEs);
     TabViewModule,
     ReactiveFormsModule,
     NgxPayPalModule,
+    MenubarModule,
+    AuthModule.forRoot({
+      domain: environment.auth.domain,
+      clientId: environment.auth.clientId,
+      authorizationParams: {
+        redirect_uri: environment.auth.redirectUri
+      }
+    }),
+   
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es' }], 
   bootstrap: [AppComponent]

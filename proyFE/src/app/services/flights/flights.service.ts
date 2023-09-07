@@ -62,8 +62,8 @@ export interface SearchFlightsRequest {
 })
 export class FlightsService {
 
-  baseUrl: string = "http://localhost:8000"
-  flightsUrl: string = "http://localhost:8000/flights"
+  baseUrl: string = "https://proyect-software-ii-vercel-c2bwfssqs-r00rss.vercel.app"
+  flightsUrl: string = "https://proyect-software-ii-vercel-c2bwfssqs-r00rss.vercel.app/flights"
   constructor(public http: HttpClient) { }
 
   searchFlights(

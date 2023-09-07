@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MailService {
 
-  private baseUrl = 'http://localhost:8000/api/send-email';
+  private baseUrl = 'https://proyect-software-ii-vercel-c2bwfssqs-r00rss.vercel.app/api/send-email';
 
   constructor(private http: HttpClient) {}
 
