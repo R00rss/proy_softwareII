@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends, Body, Query
 
 from os import path
 import uvicorn
-from database.database import SessionLocal
+from database.database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
 from database import models, schemas
 from sqlalchemy.orm import Session, aliased
@@ -32,6 +32,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+models.Base.metadata.create_all(bind=engine)
 
 pathname = path.dirname(path.realpath(__file__))
 
@@ -202,6 +204,20 @@ def get_planes(db: Session = Depends(get_db), list: List[schemas.AirplaneSeat] =
     return db_flight
 
 
+@app.post("/plane_seat/", response_model=schemas.AirplaneSeat)
+def create_plane_seat(
+    plane_seat: schemas.AirplaneSeatCreate, db: Session = Depends(get_db)
+):
+    db_plane_seat = models.AirplaneSeat(**plane_seat.dict())
+    db.add(db_plane_seat)
+    db.commit()
+    db.refresh(db_plane_seat)
+    return db_plane_seat
+
+
+#
+
+
 @app.post("/flights/", response_model=schemas.Flight)
 def create_flight(flight: schemas.FlightCreate, db: Session = Depends(get_db)):
     db_flight = models.Flight(**flight.dict())
@@ -342,6 +358,44 @@ def get_destinations(db: Session = Depends(get_db), skip: int = 0, limit: int = 
     return db_airports
 
 
+# CRUD FOR PILOTS
+@app.get("/pilots/", response_model=List[schemas.Pilot])
+def read_pilots(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
+    db_pilots = db.query(models.Pilot).offset(skip).limit(limit).all()
+    return db_pilots
+
+
+@app.post("/pilots/", response_model=schemas.Pilot)
+def create_pilot(pilot: schemas.PilotCreate, db: Session = Depends(get_db)):
+    db_pilot = models.Pilot(**pilot.dict())
+    db.add(db_pilot)
+    db.commit()
+    db.refresh(db_pilot)
+    return db_pilot
+
+
+@app.get("/pilots/{pilot_id}", response_model=schemas.Pilot)
+def read_pilot(pilot_id: str, db: Session = Depends(get_db)):
+    db_pilot = db.query(models.Pilot).filter(models.Pilot.id == pilot_id).first()
+    if db_pilot is None:
+        raise HTTPException(status_code=404, detail="Pilot not found")
+    return db_pilot
+
+
+@app.put("/pilots/{pilot_id}", response_model=schemas.Pilot)
+def update_pilot(
+    pilot_id: str, pilot: schemas.PilotCreate, db: Session = Depends(get_db)
+):
+    db_pilot = db.query(models.Pilot).filter(models.Pilot.id == pilot_id).first()
+    if db_pilot is None:
+        raise HTTPException(status_code=404, detail="Pilot not found")
+    for key, value in pilot.dict().items():
+        setattr(db_pilot, key, value)
+    db.commit()
+    db.refresh(db_pilot)
+    return db_pilot
+
+
 @app.post("/api/send-email")
 async def send_email(
     recipients: list = Body(...),
@@ -416,5 +470,5 @@ async def send_email(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+# if __name__ == "__main__":
+#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

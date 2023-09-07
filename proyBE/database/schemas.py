@@ -26,7 +26,6 @@ class PlaneBase(BaseModel):
     capacity: int
     serial_number: str
     code: str
-    airplaneSeats: List[AirplaneSeat] = []
 
 
 class PlaneCreate(PlaneBase):
@@ -35,6 +34,7 @@ class PlaneCreate(PlaneBase):
 
 class Plane(PlaneBase):
     id: UUID4
+    airplaneSeats: List[AirplaneSeat] = []
 
     class Config:
         from_attributes = True

@@ -81,7 +81,7 @@ class AirplaneSeat(Base):
     __tablename__ = "airplane_seat"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    plane_id = Column(String, ForeignKey("plane.id"), nullable=False)
+    plane_id = Column(UUID(as_uuid=True), ForeignKey("plane.id"), nullable=False)
     seat_number = Column(String, nullable=False)
     seat_type = Column(String, nullable=False)
     seat_status = Column(String, nullable=False)
@@ -94,10 +94,14 @@ class Flight(Base):
     __tablename__ = "flight"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    plane_id = Column(String, ForeignKey("plane.id"), nullable=False)
-    pilot_id = Column(String, ForeignKey("pilot.id"), nullable=False)
-    airport_origin_id = Column(String, ForeignKey("airport.id"), nullable=False)
-    airport_destination_id = Column(String, ForeignKey("airport.id"), nullable=False)
+    plane_id = Column(UUID(as_uuid=True), ForeignKey("plane.id"), nullable=False)
+    pilot_id = Column(UUID(as_uuid=True), ForeignKey("pilot.id"), nullable=False)
+    airport_origin_id = Column(
+        UUID(as_uuid=True), ForeignKey("airport.id"), nullable=False
+    )
+    airport_destination_id = Column(
+        UUID(as_uuid=True), ForeignKey("airport.id"), nullable=False
+    )
     origin = Column(String, nullable=False)
     destination = Column(String, nullable=False)
     departure = Column(DateTime, nullable=False)
@@ -158,7 +162,7 @@ class Invoice(Base):
     invoice_date = Column(DateTime)
     payment_type = Column(String, nullable=False)
     payment_status = Column(String, nullable=False)
-    user_id = Column(String, ForeignKey("user.id"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), nullable=False)
     total = Column(Float, nullable=False)
 
     user = relationship("User", back_populates="invoices")
@@ -171,11 +175,13 @@ class Reservation(Base):
     __tablename__ = "reservation"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    flight_id = Column(String, ForeignKey("flight.id"), nullable=False)
-    seat_id = Column(String, ForeignKey("airplane_seat.id"), nullable=False)
-    passenger_id = Column(String, ForeignKey("passenger.id"), nullable=False)
-    luggage_id = Column(String, ForeignKey("luggage.id"), nullable=False)
-    invoice_id = Column(String, ForeignKey("invoice.id"), nullable=False)
+    flight_id = Column(UUID(as_uuid=True), ForeignKey("flight.id"), nullable=False)
+    seat_id = Column(UUID(as_uuid=True), ForeignKey("airplane_seat.id"), nullable=False)
+    passenger_id = Column(
+        UUID(as_uuid=True), ForeignKey("passenger.id"), nullable=False
+    )
+    luggage_id = Column(UUID(as_uuid=True), ForeignKey("luggage.id"), nullable=False)
+    invoice_id = Column(UUID(as_uuid=True), ForeignKey("invoice.id"), nullable=False)
     reservation_code = Column(String, nullable=False)
     reservation_status = Column(String, nullable=False)
     reservation_date = Column(DateTime, nullable=False)
@@ -191,7 +197,7 @@ class PayPal(Base):
     __tablename__ = "paypal"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    invoice_id = Column(String, ForeignKey("invoice.id"), nullable=False)
+    invoice_id = Column(UUID(as_uuid=True), ForeignKey("invoice.id"), nullable=False)
     paypal_email = Column(String, nullable=False)
     paypal_password = Column(String, nullable=False)
 
@@ -202,7 +208,7 @@ class CreditCard(Base):
     __tablename__ = "creditcard"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    invoice_id = Column(String, ForeignKey("invoice.id"), nullable=False)
+    invoice_id = Column(UUID(as_uuid=True), ForeignKey("invoice.id"), nullable=False)
     creditcard_number = Column(String, nullable=False)
     creditcard_name = Column(String, nullable=False)
     creditcard_expiration = Column(String, nullable=False)
