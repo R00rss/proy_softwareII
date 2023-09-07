@@ -16,6 +16,7 @@ export class PaymentComponent implements OnInit {
   public payPalConfig?: IPayPalConfig;
 
   public showPaypalButtons: boolean = true;
+  nombreCliente: String = "Mariuxi";
 
   constructor(
     private emailService: MailService,
