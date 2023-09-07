@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
-<section class="min-h-[calc(100vh-116px)]">
-    <section class="shadow-[2px_2px_13px_-4px] w-[min(800px,90%)] mx-auto py-6 px-3 rounded">
+<section class="min-h-[calc(100vh-132px)]">
+    <section class="mt-4 shadow-[2px_2px_13px_-4px] w-[min(1200px,90%)] mx-auto py-6 px-3 rounded">
         <h1 class="py-3 text-2xl font-semibold">
             Equipaje Adicional
         </h1>
@@ -12,43 +12,64 @@
             </p>
         </section>
     </section>
-    <section class="flex justify-center items-center gap-5 w-[min(800px,90%)] mx-auto">
-        <ul class="py-5">
-            <li *ngFor="let passenger of passengers" class="flex flex-col justify-center items-center gap-2">
-                <button [ngClass]="{'border-[#007CA6]':passengerSelected.passport === passenger.passport}"
-                    class="border-2 py-4 px-3 w-[300px] flex justify-center items-center gap-10"
-                    (click)="handleChangePassenger(passenger)">
-                    <p class="font-semibold text-lg">
-                        {{ passenger.name }}
-                    </p>
-                    <p class="font-medium text-sm text-end">
-                        ${{ passenger.numBaggage * passenger.priceBaggage}} USD
-                    </p>
-                </button>
-            </li>
-        </ul>
-        <section class="bg-slate-500 h-full w-full py-7 px-4">
-            <section>
-                <img src="../../../../assets/images/maleta.jpeg" class="w-28 h-28 object-contain" alt="maleta">
-                <p>Equipaje de bodega de 23kg (50lbs) </p>
-            </section>
-            <section class="flex flex-col w-[200px]">
-                <p-inputNumber [style]="{width: '100%'}" (ngModelChange)="handleChangeBaggage($event)" [min]="0"
-                    [max]="5" [(ngModel)]="passengerSelected.numBaggage" [showButtons]="true" buttonLayout="horizontal"
-                    inputId="horizontal" spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-danger"
-                    incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
-                    decrementButtonIcon="pi pi-minus">
-                </p-inputNumber>
-                <section class="flex flex-col justify-between items-center">
-                    <p class="font-medium text-sm">
-                        Total
-                    </p>
-                    <p class="font-semibold text-lg">
-                        ${{ passengerSelected.numBaggage * passengerSelected.priceBaggage}} USD
-                    </p>
+    <section class="w-[min(1200px,90%)] mx-auto">
+        <section class="flex justify-center items-center gap-5 w-full">
+            <ul class="py-5">
+                <li *ngFor="let passenger of passengers" class="flex flex-col justify-center items-center gap-2">
+                    <button [ngClass]="{'border-[#007CA6]':passengerSelected.passport === passenger.passport}"
+                        class="border-2 py-4 px-3 w-[200px] flex justify-center items-center gap-10"
+                        (click)="handleChangePassenger(passenger)">
+                        <p class="font-semibold text-lg">
+                            {{ passenger.name }}
+                        </p>
+                        <p class="font-medium text-sm text-end">
+                            ${{ passenger.numBaggage * passenger.priceBaggage}} USD
+                        </p>
+                    </button>
+                </li>
+            </ul>
+            <section
+                class="bg-slate-50 h-full w-full flex justify-center items-center gap-3 shadow-[2px_2px_10px_-4px] px-2 py-2">
+                <section class="flex justify-center items-center">
+                    <img src="../../../../assets/images/baggage.png" class="w-28 h-28 object-contain" alt="maleta">
+                    <section>
+                        <p class="text-base font-medium">Equipaje de bodega de 23kg (50lbs) </p>
+                        <section>
+                            <p class="font-normal text-xs">Precio de la primera pieza</p>
+                            <p class="text-base font-medium">$15.00 USD</p>
+                        </section>
+                    </section>
                 </section>
-            </section>
+                <section class="flex flex-col justify-center items-center gap-3">
+                    <p-inputNumber inputStyleClass="form-control-inputnumber" [style]="{width: '110px'}"
+                        (ngModelChange)="handleChangeBaggage($event)" [min]="0" [max]="5"
+                        [(ngModel)]="passengerSelected.numBaggage" [showButtons]="true" buttonLayout="horizontal"
+                        inputId="horizontal" spinnerMode="horizontal" [step]="1" decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus">
+                    </p-inputNumber>
+                    <section class="flex flex-col justify-between items-center">
+                        <p class="font-medium text-sm  w-full text-end">
+                            Total
+                        </p>
+                        <p class="font-semibold text-lg w-full text-center">
+                            ${{ passengerSelected.numBaggage * passengerSelected.priceBaggage}} USD
+                        </p>
+                    </section>
+                </section>
 
+            </section>
+        </section>
+        <section
+            class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
+            <button (click)="goToPayment()"
+                class="w-[280px] cursor-pointer flex justify-center items-center gap-2 duration-300 border border-slate-50 hover:bg-transparent hover:text-slate-50 bg-slate-50 text-slate-900 hover:text-slateborder-slate-50 px-2 py-2.5 rounded-lg mr-2">
+                <p>Continuar</p>
+                <img class="w-6 h-6 object-contain hue-rotate-[105deg] invert filter"
+                    src="../../../assets/icons/ticket.svg" alt="">
+            </button>
         </section>
     </section>
-    <app-footer></app-footer>
+</section>
+
+<app-footer></app-footer>

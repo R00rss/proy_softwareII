@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ICreateOrderRequest, IPayPalConfig } from 'ngx-paypal';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { MessagesService } from 'src/app/services/gui/messages/messages.service';
 import { MailService } from 'src/app/services/mail/mail.service';
+import { FlightStateService } from 'src/app/services/states/flight/flight-state.service';
+import { PaymentService } from 'src/app/services/states/payment/payment.service';
 
 @Component({
   selector: 'app-payment',
@@ -15,15 +18,42 @@ export class PaymentComponent implements OnInit {
   public showPaypalButtons: boolean = true;
 
   constructor(
-    private modalService: NgbModal,
-    private emailService: MailService
+    private emailService: MailService,
+    private paymentService: PaymentService,
+    private router: Router,
+    private flightStateService: FlightStateService
+
+    // private messageService: MessagesService
+
   ) { }
 
   ngOnInit(): void {
     this.initConfig();
+
   }
-  
+
   private initConfig(): void {
+    const flight = this.flightStateService.getSelectedFlight();
+    const flightReturn = this.flightStateService.getSelectedFlightReturn();
+    console.log(flight);
+    console.log(flightReturn)
+    let payment = this.paymentService.getSelectedPayment();
+    if (payment === undefined) {
+      payment = {
+        amount: 9 * 150.00,
+        email: "",
+        telephone: "0978738369"
+      }
+    }
+    const invoice = {
+      invoice_status: 'PAGADO',
+      invoice_date: new Date(),
+      payment_type: 'PAYPAL',
+      payment_status: 'PAGADO',
+      user_id: '5144d166-a2df-4d62-99d8-dc49a0e54159',
+      total: payment.amount,
+    }
+    console.log(payment)
     this.payPalConfig = {
       currency: 'USD',
       clientId: 'AVrf4iSi_rlOReiC4biWgY0Wk9JkaXhC-DAtk8ZI6YLcAVOR8zaQ1zv_Gn-Kgy6wUOhy3xx7a_r73HbF',
@@ -33,11 +63,11 @@ export class PaymentComponent implements OnInit {
           {
             amount: {
               currency_code: 'USD',
-              value: '600.0',
+              value: payment?.amount + "",
               breakdown: {
                 item_total: {
                   currency_code: 'USD',
-                  value: '600.0'
+                  value: payment?.amount + "",
                 }
               }
             },
@@ -48,34 +78,7 @@ export class PaymentComponent implements OnInit {
                 category: 'DIGITAL_GOODS',
                 unit_amount: {
                   currency_code: 'USD',
-                  value: '150.00',
-                },
-              },
-              {
-                name: 'Boletos de avión Aerolinea Horizon Jet',
-                quantity: '1',
-                category: 'DIGITAL_GOODS',
-                unit_amount: {
-                  currency_code: 'USD',
-                  value: '150.00',
-                },
-              },
-              {
-                name: 'Boletos de avión Aerolinea Horizon Jet',
-                quantity: '1',
-                category: 'DIGITAL_GOODS',
-                unit_amount: {
-                  currency_code: 'USD',
-                  value: '150.00',
-                },
-              },
-              {
-                name: 'Boletos de avión Aerolinea Horizon Jet',
-                quantity: '1',
-                category: 'DIGITAL_GOODS',
-                unit_amount: {
-                  currency_code: 'USD',
-                  value: '150.00',
+                  value: payment?.amount + "",
                 },
               }
             ]
@@ -96,13 +99,14 @@ export class PaymentComponent implements OnInit {
         });
       },
       onClientAuthorization: (data) => {
-        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', 
-        JSON.stringify(data));
+
+        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point',
+          JSON.stringify(data));
         this.openModal(
           data.purchase_units[0].items,
           data.purchase_units[0].amount.value
         );
-        this.sendEmail();
+        this.sendEmail(payment?.amount ? payment?.amount : 0, payment?.email ? payment?.email : "alejandra.onadelatorre@epn.edu.ec");
       },
       onCancel: (data, actions) => {
         console.log('OnCancel', data, actions);
@@ -115,39 +119,33 @@ export class PaymentComponent implements OnInit {
       },
     }
   }
+  itemsToModal: any;
+  amountToModal: any;
+  showModal: boolean = false;
+  closeModal() {
+    this.showModal = false;
+  }
 
   openModal(items: any, amount: any): void {
-    const modalRef = this.modalService.open(ModalComponent);
-    modalRef.componentInstance.items = items;
-    modalRef.componentInstance.amount = amount;
+    this.showModal = true;
+    this.itemsToModal = items;
+    this.amountToModal = amount;
   }
 
   pay() {
     this.showPaypalButtons = true;
   }
- 
-  back(){
+
+  back() {
     this.showPaypalButtons = false;
   }
 
-  sendEmail() {
+  sendEmail(valor: number, email: string) {
     const apiKey = 'mysecretkeyemail';
     const emailData = {
-      recipients: ['alejandra.onadelatorre@epn.edu.ec'],
+      recipients: [email],
       body: {
-        "Cantidad de boletos ": "4",
-        "Adulto ": "Alejandra Oña",
-        "Niño": "David Alcívar",
-        "Maletas adicionales ": "No",
-        "Fecha de ida ":"10-09-2023",
-        "Fecha de regreso ": "15-09-2023",
-        "Asientos escogidos ": "A1,A2",
-        "Aeropuerto de origen (ida) " : "Quito",
-        "Aeropuerto de destino (ida) ": "Guayaquil",
-        "Aeropuerto de origen (vuelta) " : "Guayaquil",
-        "Aeropuerto de destino (vuelta) ": "Quito",
-        "Hora de salida": "15:00",
-        "Valor total ": "150.00 USD"
+        "Valor total": "$ " + valor,
       },
       subject: 'Detalle de su compra',
     };

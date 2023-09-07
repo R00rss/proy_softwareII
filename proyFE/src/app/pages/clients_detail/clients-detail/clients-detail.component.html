@@ -76,7 +76,13 @@
                 </p-tabPanel>
             </p-tabView>
             <section
-                class="py-2 w-full flex flex-row justify-end items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
+                class="py-2 w-full flex flex-row justify-center items-center gap-2 text-base font-medium rounded-b-lg bg-[var(--primary-color)]">
+                <button (click)="goToSeats()" type="button"
+                    class="w-[280px] cursor-pointer flex justify-center items-center gap-2 duration-300 border border-slate-50 hover:bg-transparent hover:text-slate-50 bg-slate-50 text-slate-900 hover:text-slateborder-slate-50 px-2 py-2.5 rounded-lg mr-2">
+                    <p>Asientos Personalizados</p>
+                    <img class="w-6 h-6 object-contain hue-rotate-[105deg] invert filter"
+                        src="../../../assets/icons/ticket.svg" alt="">
+                </button>
                 <button type="submit"
                     class="w-[280px] cursor-pointer flex justify-center items-center gap-2 duration-300 border border-slate-50 hover:bg-transparent hover:text-slate-50 bg-slate-50 text-slate-900 hover:text-slateborder-slate-50 px-2 py-2.5 rounded-lg mr-2">
                     <p>Continuar</p>

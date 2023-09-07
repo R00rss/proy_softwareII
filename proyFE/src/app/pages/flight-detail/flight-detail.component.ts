@@ -7,6 +7,7 @@ import { Flight } from 'src/app/services/flights/flights.service';
 import { PlaneSeatsService, Seat } from 'src/app/services/seats/plane-seats.service';
 import { FilterStateService, Filters } from 'src/app/services/states/filter/filter-state.service';
 import { FlightStateService } from 'src/app/services/states/flight/flight-state.service';
+import { PaymentService } from 'src/app/services/states/payment/payment.service';
 
 
 enum ESelectedCostKey {
@@ -44,6 +45,7 @@ export class FlightDetailComponent {
 
   constructor(private route: ActivatedRoute, private flightStateService: FlightStateService, private router: Router
     , private planeSeatsService: PlaneSeatsService, private filterStateService: FilterStateService
+    , private paymentService: PaymentService
   ) {
   }
 
@@ -54,7 +56,7 @@ export class FlightDetailComponent {
         this.tarifa = this.getTarifa(this.selectedCostKey);
       }
     });
-    
+
     this.flight = this.flightStateService.getSelectedFlight();
 
     if (this.flight === undefined) {
@@ -100,7 +102,7 @@ export class FlightDetailComponent {
       }
     }
 
-    
+
 
 
     // console.log({ filters })
@@ -137,6 +139,11 @@ export class FlightDetailComponent {
   }
 
   handleSetClients() {
+    this.paymentService.setSelectedPayment({
+      email: '',
+      telephone: '',
+      amount: (this.price + this.priceReturn) * this.numberOfPassengers
+    });
     // if (this.totalPassengers <= 0) return this.router.navigate(['/home']);
     this.router.navigate(['/clients_detail'])
     return

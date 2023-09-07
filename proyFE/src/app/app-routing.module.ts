@@ -20,7 +20,6 @@ const routes: Routes = [
   { path: 'seats_detail', component: SeatsDetailComponent },
   { path: 'payment', component: PaymentComponent },
   { path: 'baggage', component: BaggageComponent },
-  // { path: 'flightDetail', component: FlightDetailComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

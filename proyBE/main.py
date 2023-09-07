@@ -211,6 +211,28 @@ def create_flight(flight: schemas.FlightCreate, db: Session = Depends(get_db)):
     return db_flight
 
 
+@app.post("/invoice/", response_model=schemas.InvoiceCreate)
+def create_flight(invoice: schemas.InvoiceCreate, db: Session = Depends(get_db)):
+    print(invoice)
+    invoice.invoice_date = datetime.now()
+    db_invoice = models.Invoice(**invoice.dict())
+    db.add(db_invoice)
+    db.commit()
+    db.refresh(db_invoice)
+    return db_invoice
+
+
+@app.post("/reservation/", response_model=schemas.ReservationCreate)
+def create_flight(
+    reservation: schemas.ReservationCreate, db: Session = Depends(get_db)
+):
+    db_reservation = models.Reservation(**reservation.dict())
+    db.add(db_reservation)
+    db.commit()
+    db.refresh(db_reservation)
+    return db_reservation
+
+
 @app.get("/flights/{flight_id}", response_model=schemas.Flight)
 def read_flight(flight_id: str, db: Session = Depends(get_db)):
     db_flight = db.query(models.Flight).filter(models.Flight.id == flight_id).first()
@@ -319,6 +341,7 @@ def get_destinations(db: Session = Depends(get_db), skip: int = 0, limit: int = 
     db_airports = db.query(models.Airport).offset(skip).limit(limit).all()
     return db_airports
 
+
 @app.post("/api/send-email")
 async def send_email(
     recipients: list = Body(...),
@@ -364,7 +387,7 @@ async def send_email(
         """
         for key, value in body.items():
             message += f'<p style = "margin: 1px 0px 0px 30px; font-size:12px;"><strong>{key}:</strong> {value}</p><br>'
-        message +="""
+        message += """
         </div>
         </body>
         </html>
@@ -391,6 +414,7 @@ async def send_email(
         return {"message": "Email sent successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

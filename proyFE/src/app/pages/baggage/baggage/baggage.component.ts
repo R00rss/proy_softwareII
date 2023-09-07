@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { PassengerInfo } from 'src/app/model/passengers';
 import { PassengersService } from 'src/app/services/states/passengers/passengers.service';
+import { PaymentService } from 'src/app/services/states/payment/payment.service';
 
 interface PassengerInfoBaggage extends PassengerInfo {
   numBaggage: number,
@@ -16,7 +18,11 @@ export class BaggageComponent {
   passengers: PassengerInfoBaggage[] = []
   passengerSelected: PassengerInfoBaggage;
   value18: number = 0
-  constructor(passengersService: PassengersService) {
+  constructor(passengersService: PassengersService,
+    private router: Router,
+    private paymentService: PaymentService
+
+  ) {
     const DEFAULT_PASSENGERS: PassengerInfoBaggage[] = [
       {
         lastName: 'Perez',
@@ -54,6 +60,23 @@ export class BaggageComponent {
     this.passengerSelected = passenger;
   }
   handleChangeBaggage(numBaggage: number) {
+
+  }
+  goToPayment() {
+    const selectedPayment = this.paymentService.getSelectedPayment();
+    if (selectedPayment === undefined) {
+      console.log("selectedPayment es undefined")
+      return;
+    }
+    const prevAmount = selectedPayment.amount ? selectedPayment.amount : 0;
+    const baggagePrice = this.passengers.reduce((acc, passenger) => {
+      return acc + passenger.numBaggage * passenger.priceBaggage;
+    }, 0)
+    this.paymentService.setSelectedPayment({
+      ...selectedPayment,
+      amount: prevAmount + baggagePrice
+    });
+    this.router.navigate(['/payment'])
 
   }
 

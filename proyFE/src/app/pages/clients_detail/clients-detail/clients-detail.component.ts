@@ -6,6 +6,7 @@ import { FilterStateService, Filters } from 'src/app/services/states/filter/filt
 import { Client, FlightStateService } from 'src/app/services/states/flight/flight-state.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PassengersService } from 'src/app/services/states/passengers/passengers.service';
+import { PaymentService } from 'src/app/services/states/payment/payment.service';
 
 @Component({
   selector: 'app-clients-detail',
@@ -32,7 +33,8 @@ export class ClientsDetailComponent implements OnInit {
     private filterStateService: FilterStateService,
     private fb: FormBuilder,
     private passengersService: PassengersService,
-    private router: Router
+    private router: Router,
+    private paymentService: PaymentService
   ) {
     const currentDate = new Date();
     this.minDate = new Date(currentDate.getFullYear() - 65, currentDate.getMonth(), currentDate.getDate());
@@ -76,7 +78,7 @@ export class ClientsDetailComponent implements OnInit {
       });
       this.passengersForm.addControl('client_tel', this.fb.control('', Validators.required));
       this.passengersForm.addControl('client_email', this.fb.control('', Validators.required));
-    }else{
+    } else {
       this.passengersForm = this.fb.group({});
     }
   }
@@ -86,7 +88,7 @@ export class ClientsDetailComponent implements OnInit {
     const passportRegex = /^[A-Z0-9]{8}$/; // Un ejemplo simple para pasaportes de 8 caracteres
     return passportRegex.test(passportNumber);
   }
-  
+
   ngOnInit(): void {
     console.log("ngOnInit de clients-detail")
 
@@ -110,15 +112,51 @@ export class ClientsDetailComponent implements OnInit {
 
     this.isRoundTrip = flightReturn === undefined ? false : true;
   }
+
+
+
+  goToSeats() {
+    if (this.passengersForm.valid) {
+      console.log('Formulario válido');
+      const passengersInfo = this.mapFormToPassengers(this.passengersForm);
+      this.passengersService.setSelectedPassenger(passengersInfo);
+      const selectedPayment = this.paymentService.getSelectedPayment();
+      if (selectedPayment === undefined) {
+        console.log("selectedPayment es undefined")
+        return;
+      }
+      this.paymentService.setSelectedPayment({
+        ...selectedPayment,
+        email: this.passengersForm.get('client_email')?.value,
+        telephone: this.passengersForm.get('client_tel')?.value,
+      });
+      console.log("Passengers:", this.passengersForm)
+      console.log("passengersInfo: ", passengersInfo)
+      this.router.navigate(['/seats_detail']);
+    } else {
+      console.log('Formulario no válido');
+    }
+
+  }
   handleSubmit() {
     console.log("handleSubmit")
     if (this.passengersForm.valid) {
       console.log('Formulario válido');
       const passengersInfo = this.mapFormToPassengers(this.passengersForm);
       this.passengersService.setSelectedPassenger(passengersInfo);
+      const selectedPayment = this.paymentService.getSelectedPayment();
+      if (selectedPayment === undefined) {
+        console.log("selectedPayment es undefined")
+        return;
+      }
+      this.paymentService.setSelectedPayment({
+        ...selectedPayment,
+        email: this.passengersForm.get('client_email')?.value,
+        telephone: this.passengersForm.get('client_tel')?.value,
+      });
       console.log("Passengers:", this.passengersForm)
       console.log("passengersInfo: ", passengersInfo)
-      this.router.navigate(['/seats_detail']);
+      this.router.navigate(['/baggage']);
     } else {
       console.log('Formulario no válido');
     }

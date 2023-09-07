@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SEAT_STATUS } from 'src/app/constants/states';
 import { PassengerInfo } from 'src/app/model/passengers';
 import { MessagesService } from 'src/app/services/gui/messages/messages.service';
 import { PlaneSeatsService, Seat } from 'src/app/services/seats/plane-seats.service';
 import { FlightStateService } from 'src/app/services/states/flight/flight-state.service';
 import { PassengersService } from 'src/app/services/states/passengers/passengers.service';
+import { PaymentService } from 'src/app/services/states/payment/payment.service';
 interface SeatEditable extends Seat {
   new_seat_status?: string;
 }
@@ -26,6 +27,8 @@ export class SeatsDetailComponent {
   passengers: PassengerInfo[] = [];
   numberOfPassengers: number = 0;
   seatsNumber: number = 0;
+  totalSeats: number = 0;
+  showSeatsSelection: boolean = false;
   colors: Color[] = [
     { color: '#4bad21', status: SEAT_STATUS.AVAILABLE },
     { color: '#3329e6', status: SEAT_STATUS.OCCUPIED },
@@ -38,10 +41,16 @@ export class SeatsDetailComponent {
     private seatService: PlaneSeatsService,
     private router: Router,
     private messagesService: MessagesService,
+    private route: ActivatedRoute,
+    private paymentService: PaymentService
 
   ) {
+    // this.route.queryParams.subscribe(params => {
+    //   console.log({ params })
+    // });
     const flight = this.flightStateService.getSelectedFlight();
     const passengers = this.passengersService.getSelectedPassenger();
+
     // if (flight === undefined) {
     //   // redirect to previous page
     //   window.history.back();
@@ -64,11 +73,13 @@ export class SeatsDetailComponent {
       this.passengers = passengers;
       this.numberOfPassengers = passengers.length;
       this.seatsNumber = passengers.length;
+      this.totalSeats = passengers.length;
 
     } else {
       // this.passengers = [];
       this.numberOfPassengers = 2;
       this.seatsNumber = 2;
+      this.totalSeats = 2;
     }
 
   }
@@ -95,11 +106,24 @@ export class SeatsDetailComponent {
     }
   }
 
-  updateSeats() {
+  goToHome() {
+    this.router.navigate(['/'])
 
   }
 
   goToPayment() {
+
+    const selectedPayment = this.paymentService.getSelectedPayment();
+    if (selectedPayment === undefined) {
+      console.log("selectedPayment es undefined")
+      return;
+    }
+    const prevAmount = selectedPayment.amount ? selectedPayment.amount : 0;
+    this.paymentService.setSelectedPayment({
+      ...selectedPayment,
+      amount: prevAmount + this.totalSeats * 20
+    });
+
     this.seatService.updateSeats(this.seats).subscribe((seats) => {
       console.log(seats)
       this.router.navigate(['/payment'])
